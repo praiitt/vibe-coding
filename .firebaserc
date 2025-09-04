@@ -1,7 +1,5 @@
 {
   "projects": {
-    "staging": "jain-temple-trust"
-  },
-  "targets": {},
-  "etags": {}
+    "default": "library-management-806d9"
+  }
 }
