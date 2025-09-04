@@ -1888,18 +1888,50 @@ section {
     padding: 4rem 0;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.webinar-register::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+    pointer-events: none;
 }
 
 .webinar-header {
     text-align: center;
     margin-bottom: 3rem;
     color: white;
+    position: relative;
+    z-index: 2;
+}
+
+.webinar-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease-in-out infinite;
 }
 
 .webinar-subtitle {
     font-size: 1.2rem;
     margin: 1rem 0 2rem;
     opacity: 0.9;
+    color: white;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 .webinar-details {
@@ -1908,21 +1940,32 @@ section {
     gap: 2rem;
     margin-top: 2rem;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
 }
 
 .detail-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     padding: 0.8rem 1.5rem;
     border-radius: 25px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.detail-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .detail-item i {
-    color: #ffd93d;
+    color: #4ecdc4;
     font-size: 1.1rem;
 }
 
@@ -1932,10 +1975,12 @@ section {
     gap: 3rem;
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
+    z-index: 2;
 }
 
 .webinar-info {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     padding: 2rem;
     border-radius: 15px;
     backdrop-filter: blur(10px);
@@ -1945,9 +1990,10 @@ section {
 }
 
 .webinar-info h3 {
-    color: #ffd93d;
+    color: #4ecdc4;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
+    font-weight: 600;
 }
 
 .learning-list {
@@ -1961,28 +2007,32 @@ section {
     gap: 1rem;
     margin-bottom: 1rem;
     padding: 0.8rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
 }
 
 .learning-list li:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .learning-list li i {
-    color: #4caf50;
+    color: #4ecdc4;
     font-size: 1.1rem;
     min-width: 20px;
 }
 
 .webinar-form {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
     padding: 2.5rem;
     border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .webinar-form h3 {
@@ -1990,6 +2040,7 @@ section {
     margin-bottom: 2rem;
     text-align: center;
     font-size: 1.5rem;
+    font-weight: 600;
 }
 
 .form-row {
@@ -2021,6 +2072,7 @@ section {
     font-size: 1rem;
     transition: all 0.3s ease;
     background: #f8f9fa;
+    color: #333;
 }
 
 .webinar-form .form-group input:focus,
@@ -2031,6 +2083,13 @@ section {
     background: white;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     transform: translateY(-2px);
+}
+
+.webinar-form .form-group input:hover,
+.webinar-form .form-group select:hover,
+.webinar-form .form-group textarea:hover {
+    border-color: #667eea;
+    background: white;
 }
 
 .webinar-form .form-group textarea {
@@ -2044,17 +2103,35 @@ section {
     font-size: 1.1rem;
     font-weight: 600;
     border-radius: 10px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
     border: none;
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
     margin-bottom: 1rem;
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.webinar-submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.webinar-submit-btn:hover::before {
+    left: 100%;
 }
 
 .webinar-submit-btn:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
 }
 
 .webinar-submit-btn:disabled {
@@ -2071,10 +2148,12 @@ section {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    font-weight: 500;
 }
 
 .payment-note i {
-    color: #4caf50;
+    color: #4ecdc4;
+    font-size: 1.1rem;
 }
 
 /* Responsive Design for Webinar */
