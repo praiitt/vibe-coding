@@ -14,11 +14,17 @@ const WebinarSuccess = () => {
 
   return (
     <section className="webinar-success">
-      <div className="container" style={{ textAlign: 'center' }}>
+      <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}>
         <div className="success-icon">
           <i className="fas fa-check-circle"></i>
         </div>
-        <h1 className="section-title">Registration Successful! 🎉</h1>
+        <h1 className="section-title" style={{ 
+          background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4)',
+          backgroundSize: '300% 300%',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          animation: 'gradientShift 3s ease-in-out infinite'
+        }}>Registration Successful! 🎉</h1>
         <p className="success-message">Your details have been saved to our database and registration is confirmed for the Vibe Coding Webinar on 22 September, 7:00 PM IST.</p>
         {ref && <p className="reference-info">Reference ID: {ref}</p>}
 
