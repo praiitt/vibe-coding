@@ -1,0 +1,271 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { analyticsService } from '../services/analytics';
+import { apiService } from '../services/api';
+
+const Hero = ({ showNotification }) => {
+  const [ref, inView] = useInView({
+    threshold: 0.5,
+    triggerOnce: true
+  });
+
+  const statsRef = useRef(null);
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [joinForm, setJoinForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    interests: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (inView && statsRef.current) {
+      const stats = statsRef.current.querySelectorAll('.stat-number');
+      stats.forEach((stat, index) => {
+        const finalValue = stat.textContent;
+        const isPercentage = finalValue.includes('%');
+        const numericValue = parseInt(finalValue.replace(/\D/g, ''));
+        
+        animateCounter(stat, 0, numericValue, isPercentage ? '%' : '+', index * 200);
+      });
+    }
+  }, [inView]);
+
+  const animateCounter = (element, start, end, suffix = '', delay = 0) => {
+    setTimeout(() => {
+      const duration = 2000;
+      const startTime = performance.now();
+      
+      function updateCounter(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const current = Math.floor(start + (end - start) * easeOutQuart);
+        
+        element.textContent = current + suffix;
+        
+        if (progress < 1) {
+          requestAnimationFrame(updateCounter);
+        }
+      }
+      
+      requestAnimationFrame(updateCounter);
+    }, delay);
+  };
+
+  const handleJoinMovement = async () => {
+    // Track button click
+    await analyticsService.trackEvent('hero_join_movement_clicked', {
+      section: 'hero',
+      action: 'open_join_modal'
+    });
+
+    setShowJoinModal(true);
+  };
+
+  const handleJoinWebinar = async () => {
+    // Track button click
+    await analyticsService.trackEvent('hero_join_webinar_clicked', {
+      section: 'hero',
+      action: 'navigate_to_webinar'
+    });
+
+    // Navigate to webinar page
+    window.location.href = '/webinar';
+  };
+
+  const handleJoinFormChange = (e) => {
+    setJoinForm({
+      ...joinForm,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleJoinFormSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // Save to database via contact API
+      await apiService.submitContactForm({
+        name: joinForm.name,
+        email: joinForm.email,
+        message: `Phone: ${joinForm.phone}\nInterests: ${joinForm.interests}\n\nJoined via Hero section`
+      });
+
+      showNotification('🎉 Welcome to the Vibe! Your details have been saved to our database. We\'ll connect with you soon!', 'success');
+      
+      // Track successful join
+      await analyticsService.trackEvent('hero_join_movement_completed', {
+        section: 'hero',
+        action: 'form_submitted',
+        name: joinForm.name,
+        email: joinForm.email
+      });
+
+      // Reset form and close modal
+      setJoinForm({ name: '', email: '', phone: '', interests: '' });
+      setShowJoinModal(false);
+    } catch (error) {
+      console.error('Error joining movement:', error);
+      showNotification('❌ Failed to join the movement. Please try again.', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <section id="home" className="hero">
+      <div className="hero-container">
+        <div className="hero-content">
+          <h1 className="hero-title">
+            Welcome to the
+            <span className="gradient-text"> Vibe Coding Lifestyle</span>
+          </h1>
+          <p className="hero-subtitle">
+            Where coding meets creativity, rhythm meets logic, and programming becomes an art form. 
+            Join the movement that's redefining what it means to be a developer in the future.
+          </p>
+          <div className="hero-buttons">
+            <button className="btn btn-primary" onClick={handleJoinMovement}>
+              Join the Movement
+            </button>
+            <button className="btn btn-secondary" onClick={handleJoinWebinar}>
+              Join the Webinar
+            </button>
+          </div>
+          <div className="hero-stats" ref={statsRef}>
+            <div className="stat">
+              <span className="stat-number">10K+</span>
+              <span className="stat-label">Lifestyle Enthusiasts</span>
+            </div>
+            <div className="stat">
+              <span className="stat-number">500+</span>
+              <span className="stat-label">Creative Projects</span>
+            </div>
+            <div className="stat">
+              <span className="stat-number">24/7</span>
+              <span className="stat-label">Vibe Community</span>
+            </div>
+          </div>
+        </div>
+        <div className="hero-visual">
+          <div className="code-animation">
+            <div className="code-line">
+              <span className="code-keyword">const</span>
+              <span className="code-variable">vibeLifestyle</span>
+              <span className="code-punctuation">=</span>
+              <span className="code-string">"🎵 rhythm + logic"</span>
+              <span className="code-punctuation">;</span>
+            </div>
+            <div className="code-line">
+              <span className="code-keyword">function</span>
+              <span className="code-function">liveVibe</span>
+              <span className="code-punctuation">()</span>
+              <span className="code-punctuation">{'{'}</span>
+            </div>
+            <div className="code-line">
+              <span className="code-indent">  </span>
+              <span className="code-keyword">return</span>
+              <span className="code-string">"✨ creativity + code + lifestyle"</span>
+              <span className="code-punctuation">;</span>
+            </div>
+            <div className="code-line">
+              <span className="code-punctuation">{'}'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="hero-background">
+        <div className="floating-shape shape-1"></div>
+        <div className="floating-shape shape-2"></div>
+        <div className="floating-shape shape-3"></div>
+      </div>
+
+      {/* Join Movement Modal */}
+      {showJoinModal && (
+        <div className="modal-overlay" onClick={() => setShowJoinModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Join the Vibe Movement</h2>
+              <button className="close-btn" onClick={() => setShowJoinModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            
+            <form onSubmit={handleJoinFormSubmit} className="join-form">
+              <div className="form-group">
+                <label htmlFor="name">Full Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={joinForm.name}
+                  onChange={handleJoinFormChange}
+                  required
+                  placeholder="Enter your full name"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={joinForm.email}
+                  onChange={handleJoinFormChange}
+                  required
+                  placeholder="Enter your email"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="phone">Phone (Optional)</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={joinForm.phone}
+                  onChange={handleJoinFormChange}
+                  placeholder="Enter your phone number"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="interests">What interests you most?</label>
+                <select
+                  id="interests"
+                  name="interests"
+                  value={joinForm.interests}
+                  onChange={handleJoinFormChange}
+                  required
+                >
+                  <option value="">Select your interest</option>
+                  <option value="creative-coding">Creative Coding</option>
+                  <option value="music-programming">Music Programming</option>
+                  <option value="lifestyle-transformation">Lifestyle Transformation</option>
+                  <option value="community">Community & Networking</option>
+                  <option value="all">All of the above</option>
+                </select>
+              </div>
+              
+              <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <i className="fas fa-spinner fa-spin" style={{ marginRight: '8px' }}></i>
+                    Joining the Vibe...
+                  </>
+                ) : 'Join the Movement'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+};
+
+export default Hero; 
