@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const WebinarSuccess = () => {
   const params = new URLSearchParams(useLocation().search);
   const ref = params.get('ref');
+  
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const addToCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Vibe%20Coding%20Webinar&dates=20240922T133000Z/20240922T150000Z&details=Join%20the%20webinar%20-%20we%27ll%20email%20you%20the%20link%20before%20the%20event.&location=Online`;
 

@@ -10,6 +10,7 @@ import CourseContent from './components/CourseContent';
 import SubscriptionManager from './components/SubscriptionManager';
 import LoginModal from './components/LoginModal';
 import Notification from './components/Notification';
+import ScrollToTop from './components/ScrollToTop';
 import WebinarLanding from './pages/WebinarLanding';
 import WebinarRegister from './pages/WebinarRegister';
 import WebinarSuccess from './pages/WebinarSuccess';
@@ -44,6 +45,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <div className="App">
         <Navbar onLoginClick={() => setShowLoginModal(true)} />
         
