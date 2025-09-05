@@ -191,7 +191,8 @@ app.get('/linkedin-callback', async (req, res) => {
     }
 
     // Exchange code for access token
-    const configuredRedirectUri = process.env.LINKEDIN_REDIRECT_URI || `${process.env.FRONTEND_URL || 'http://localhost:3000'}/linkedin-callback`;
+    const configuredRedirectUri = (process.env.LINKEDIN_REDIRECT_URI || 'https://vibe-coding--library-management-806d9.asia-east1.hosted.app/linkedin-callback').trim();
+    console.log('LinkedIn Token Exchange using redirect_uri:', configuredRedirectUri);
     const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
       method: 'POST',
       headers: {
