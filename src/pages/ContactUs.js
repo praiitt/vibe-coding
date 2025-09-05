@@ -15,15 +15,48 @@ const ContactUs = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const validateForm = () => {
+    const errors = [];
+    
+    if (form.name.length < 2) {
+      errors.push('Name must be at least 2 characters');
+    }
+    
+    if (!form.email || !form.email.includes('@')) {
+      errors.push('Valid email is required');
+    }
+    
+    if (form.subject.length < 3) {
+      errors.push('Subject must be at least 3 characters');
+    }
+    
+    if (form.message.length < 10) {
+      errors.push('Message must be at least 10 characters');
+    }
+    
+    return errors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
+    setErrorMessage('');
+
+    // Client-side validation
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      setSubmitStatus('error');
+      setErrorMessage(validationErrors.join(', '));
+      setIsSubmitting(false);
+      return;
+    }
 
     const formData = {
       name: form.name,
@@ -42,6 +75,7 @@ const ContactUs = () => {
     } catch (error) {
       console.error('Error submitting contact form:', error);
       setSubmitStatus('error');
+      setErrorMessage(error.message || 'An error occurred while submitting the form.');
     } finally {
       setIsSubmitting(false);
     }
@@ -133,7 +167,7 @@ const ContactUs = () => {
               {submitStatus === 'error' && (
                 <div className="alert alert-error">
                   <i className="fas fa-exclamation-circle"></i>
-                  Sorry, there was an error sending your message. Please try again.
+                  {errorMessage || 'Sorry, there was an error sending your message. Please try again.'}
                 </div>
               )}
 

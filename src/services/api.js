@@ -29,6 +29,13 @@ class ApiService {
 
       if (!response.ok) {
         console.error('API Error Response:', { status: response.status, data });
+        
+        // Handle validation errors specifically
+        if (response.status === 400 && data.errors && Array.isArray(data.errors)) {
+          const errorMessages = data.errors.map(err => err.msg).join(', ');
+          throw new Error(errorMessages);
+        }
+        
         throw new Error(data.error || 'Request failed');
       }
 
