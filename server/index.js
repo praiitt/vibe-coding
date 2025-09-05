@@ -162,7 +162,7 @@ app.get('/api/auth/me', auth, async (req, res) => {
   });
 });
 
-// LinkedIn OAuth callback endpoint (called by LinkedIn)
+// LinkedIn OAuth callback endpoint (called by LinkedIn) - FIXED VERSION
 app.get('/linkedin-callback', async (req, res) => {
   try {
     const { code, state, error, error_description } = req.query;
@@ -212,11 +212,10 @@ app.get('/linkedin-callback', async (req, res) => {
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
 
-    // Get user profile from LinkedIn
-    const profileResponse = await fetch('https://api.linkedin.com/v2/people/~:(id,firstName,lastName,profilePicture(displayImage~:playableStreams))', {
+    // Get user profile from LinkedIn using OpenID Connect
+    const profileResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'X-Restli-Protocol-Version': '2.0.0'
+        'Authorization': `Bearer ${accessToken}`
       }
     });
 
@@ -225,39 +224,19 @@ app.get('/linkedin-callback', async (req, res) => {
     }
 
     const profileData = await profileResponse.json();
+    console.log('LinkedIn Profile Data:', profileData);
 
-    // Try to get email from LinkedIn (optional)
-    let email = null;
-    try {
-      const emailResponse = await fetch('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))', {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'X-Restli-Protocol-Version': '2.0.0'
-        }
-      });
-
-      if (emailResponse.ok) {
-        const emailData = await emailResponse.json();
-        email = emailData.elements?.[0]?.['handle~']?.emailAddress;
-      }
-    } catch (emailError) {
-      console.log('Email not available from LinkedIn:', emailError.message);
-    }
-
-    // If no email available, create a placeholder email
-    if (!email) {
-      email = `linkedin_${profileData.id}@vibecoding.local`;
-    }
+    // Extract user information from OpenID Connect response
+    const linkedinId = profileData.sub; // Subject identifier
+    const name = profileData.name || 'LinkedIn User';
+    const email = profileData.email || `linkedin_${linkedinId}@vibecoding.local`;
+    const profilePicture = profileData.picture;
 
     // Create or find user
     let user = await User.findOne({ email });
     
     if (!user) {
       // Create new user
-      const firstName = profileData.firstName?.localized?.en_US || 'LinkedIn';
-      const lastName = profileData.lastName?.localized?.en_US || 'User';
-      const name = `${firstName} ${lastName}`;
-
       user = new User({
         name,
         email,
@@ -266,16 +245,16 @@ app.get('/linkedin-callback', async (req, res) => {
           type: 'free',
           isActive: false
         },
-        linkedinId: profileData.id,
-        profilePicture: profileData.profilePicture?.displayImage?.elements?.[0]?.identifiers?.[0]?.identifier
+        linkedinId: linkedinId,
+        profilePicture: profilePicture
       });
 
       await user.save();
     } else {
       // Update existing user with LinkedIn info if not already set
       if (!user.linkedinId) {
-        user.linkedinId = profileData.id;
-        user.profilePicture = profileData.profilePicture?.displayImage?.elements?.[0]?.identifiers?.[0]?.identifier;
+        user.linkedinId = linkedinId;
+        user.profilePicture = profilePicture;
         await user.save();
       }
     }
