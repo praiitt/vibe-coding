@@ -61,7 +61,7 @@ const WebinarLanding = () => {
               <i className="fas fa-fire"></i>
               <span>Live Session</span>
             </div>
-            <h1 className="hero-title">Vibe Coding: Build an MVP Live in One Session</h1>
+            <h1 className="hero-title">Vibe Coding: Build an MVP Live</h1>
             <div className="pricing-info">
               <div className="price-container">
                 <span className="original-price">₹999</span>
@@ -353,7 +353,7 @@ const WebinarLanding = () => {
         </div>
 
         <div className="cta">
-          <h2 className="section-title">Build an MVP With Us — Live</h2>
+          <h2 className="cta-title">Build an MVP With Us — Live</h2>
           <div className="cta-pricing">
             <div className="cta-price-container">
               <span className="cta-original-price">₹999</span>
@@ -362,7 +362,7 @@ const WebinarLanding = () => {
             </div>
             <p className="cta-subtitle">Limited seats • Recording included • Community access</p>
           </div>
-          <Link className="btn btn-primary" to="/webinar/register">Register Now for ₹99</Link>
+          <Link className="btn btn-primary cta-button" to="/webinar/register">Register Now for ₹99</Link>
         </div>
       </div>
     </section>

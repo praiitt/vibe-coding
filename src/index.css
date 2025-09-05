@@ -1914,6 +1914,10 @@ section {
 
 .webinar-landing .hero .hero-title {
     color: #111;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    font-weight: 600;
+    margin-bottom: 1rem;
 }
 
 .webinar-landing .hero .hero-subtitle {
@@ -2918,13 +2922,30 @@ section {
 
 /* CTA spacing */
 .webinar-landing .cta {
-    margin-top: 2rem;
+    margin-top: 1rem;
+    padding: 2rem 0;
+    background: #f8f9fa;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.cta-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.cta-button {
+    margin-top: 1rem;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
 }
 
 /* CTA Pricing */
 .cta-pricing {
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .cta-price-container {
@@ -2975,7 +2996,16 @@ section {
     }
     .webinar-landing .hero .hero-title {
         font-size: 2rem;
-        line-height: 1.25;
+        line-height: 1.2;
+    }
+    
+    .cta-title {
+        font-size: 1.5rem;
+    }
+    
+    .webinar-landing .cta {
+        margin-top: 0.5rem;
+        padding: 1.5rem 1rem;
     }
     .webinar-landing .hero .hero-subtitle {
         font-size: 1rem;
