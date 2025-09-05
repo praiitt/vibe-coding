@@ -162,7 +162,151 @@ app.get('/api/auth/me', auth, async (req, res) => {
   });
 });
 
-// LinkedIn OAuth authentication
+// LinkedIn OAuth callback endpoint (called by LinkedIn)
+app.get('/linkedin-callback', async (req, res) => {
+  try {
+    const { code, state, error, error_description } = req.query;
+
+    console.log('LinkedIn Callback Debug:', {
+      code: code ? 'Present' : 'Missing',
+      state: state ? 'Present' : 'Missing',
+      error: error || 'None',
+      errorDescription: error_description || 'None'
+    });
+
+    // If no parameters at all, redirect to home
+    if (!code && !error) {
+      console.log('No OAuth parameters found, redirecting to home');
+      return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/?error=no_oauth_params`);
+    }
+
+    if (error) {
+      const errorMsg = error_description || error;
+      console.error('LinkedIn OAuth error:', errorMsg);
+      return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/?error=linkedin_auth_failed&message=${encodeURIComponent(errorMsg)}`);
+    }
+
+    if (!code) {
+      return res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/?error=no_auth_code`);
+    }
+
+    // Exchange code for access token
+    const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        grant_type: 'authorization_code',
+        code: code,
+        client_id: process.env.LINKEDIN_CLIENT_ID,
+        client_secret: process.env.LINKEDIN_CLIENT_SECRET,
+        redirect_uri: process.env.LINKEDIN_REDIRECT_URI
+      })
+    });
+
+    if (!tokenResponse.ok) {
+      throw new Error('Failed to exchange code for access token');
+    }
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    // Get user profile from LinkedIn
+    const profileResponse = await fetch('https://api.linkedin.com/v2/people/~:(id,firstName,lastName,profilePicture(displayImage~:playableStreams))', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'X-Restli-Protocol-Version': '2.0.0'
+      }
+    });
+
+    if (!profileResponse.ok) {
+      throw new Error('Failed to fetch LinkedIn profile');
+    }
+
+    const profileData = await profileResponse.json();
+
+    // Try to get email from LinkedIn (optional)
+    let email = null;
+    try {
+      const emailResponse = await fetch('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'X-Restli-Protocol-Version': '2.0.0'
+        }
+      });
+
+      if (emailResponse.ok) {
+        const emailData = await emailResponse.json();
+        email = emailData.elements?.[0]?.['handle~']?.emailAddress;
+      }
+    } catch (emailError) {
+      console.log('Email not available from LinkedIn:', emailError.message);
+    }
+
+    // If no email available, create a placeholder email
+    if (!email) {
+      email = `linkedin_${profileData.id}@vibecoding.local`;
+    }
+
+    // Create or find user
+    let user = await User.findOne({ email });
+    
+    if (!user) {
+      // Create new user
+      const firstName = profileData.firstName?.localized?.en_US || 'LinkedIn';
+      const lastName = profileData.lastName?.localized?.en_US || 'User';
+      const name = `${firstName} ${lastName}`;
+
+      user = new User({
+        name,
+        email,
+        password: '', // No password for OAuth users
+        subscription: {
+          type: 'free',
+          isActive: false
+        },
+        linkedinId: profileData.id,
+        profilePicture: profileData.profilePicture?.displayImage?.elements?.[0]?.identifiers?.[0]?.identifier
+      });
+
+      await user.save();
+    } else {
+      // Update existing user with LinkedIn info if not already set
+      if (!user.linkedinId) {
+        user.linkedinId = profileData.id;
+        user.profilePicture = profileData.profilePicture?.displayImage?.elements?.[0]?.identifiers?.[0]?.identifier;
+        await user.save();
+      }
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    // Redirect to frontend with success and token
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const redirectUrl = `${frontendUrl}/linkedin-success?token=${token}&user=${encodeURIComponent(JSON.stringify({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      subscription: user.subscription,
+      profilePicture: user.profilePicture
+    }))}`;
+
+    res.redirect(redirectUrl);
+
+  } catch (error) {
+    console.error('LinkedIn callback error:', error);
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    res.redirect(`${frontendUrl}/?error=linkedin_callback_failed&message=${encodeURIComponent(error.message)}`);
+  }
+});
+
+// LinkedIn OAuth authentication (for frontend API calls)
 app.post('/api/auth/linkedin', async (req, res) => {
   try {
     const { code } = req.body;

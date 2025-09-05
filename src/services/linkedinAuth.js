@@ -3,7 +3,7 @@ import { apiService } from './api';
 class LinkedInAuthService {
   constructor() {
     this.clientId = process.env.REACT_APP_LINKEDIN_CLIENT_ID;
-    this.redirectUri = process.env.REACT_APP_LINKEDIN_REDIRECT_URI || 'http://localhost:3000/linkedin-callback';
+    this.redirectUri = process.env.REACT_APP_LINKEDIN_REDIRECT_URI || 'https://vibe-coding--library-management-806d9.asia-east1.hosted.app/linkedin-callback';
     // Use only the basic profile scope that's available by default
     this.scope = 'r_liteprofile';
   }
