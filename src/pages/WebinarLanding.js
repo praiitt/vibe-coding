@@ -70,46 +70,51 @@ const WebinarLanding = () => {
               </div>
               <p className="hero-subtitle">21 September, 1:00 PM IST • Live Online</p>
             </div>
-            <p className="hero-description">How vibe coding, AI-native tools, and creative flow will change how software is built—fast, collaborative, and joyful.</p>
-            
-            <div className="countdown-timer">
-              <div className="timer-header">
-                <i className="fas fa-clock"></i>
-                <span>Limited Time Offer - Registration Closes In:</span>
-              </div>
-              <div className="timer-display">
-                <div className="timer-unit">
-                  <span className="timer-number">{timeLeft.days}</span>
-                  <span className="timer-label">Days</span>
-                </div>
-                <div className="timer-separator">:</div>
-                <div className="timer-unit">
-                  <span className="timer-number">{timeLeft.hours}</span>
-                  <span className="timer-label">Hours</span>
-                </div>
-                <div className="timer-separator">:</div>
-                <div className="timer-unit">
-                  <span className="timer-number">{timeLeft.minutes}</span>
-                  <span className="timer-label">Minutes</span>
-                </div>
-                <div className="timer-separator">:</div>
-                <div className="timer-unit">
-                  <span className="timer-number">{timeLeft.seconds}</span>
-                  <span className="timer-label">Seconds</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="hero-buttons">
-              <Link className="btn btn-primary" to="/webinar/register">
-                <i className="fas fa-rocket"></i>
-                Register for ₹99
-              </Link>
-              <button className="btn btn-secondary" onClick={scrollToAgenda}>
-                <i className="fas fa-list"></i>
-                See Agenda
-              </button>
-            </div>
+                                <div className="hero-content-row">
+                      <div className="hero-left">
+                        <p className="hero-description">How vibe coding, AI-native tools, and creative flow will change how software is built—fast, collaborative, and joyful.</p>
+                        
+                        <div className="hero-buttons">
+                          <Link className="btn btn-primary" to="/webinar/register">
+                            <i className="fas fa-rocket"></i>
+                            Register for ₹99
+                          </Link>
+                          <button className="btn btn-secondary" onClick={scrollToAgenda}>
+                            <i className="fas fa-list"></i>
+                            See Agenda
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="countdown-timer">
+                        <div className="timer-header">
+                          <i className="fas fa-clock"></i>
+                          <span>Limited Time Offer</span>
+                        </div>
+                        <div className="timer-subtitle">Registration Closes In:</div>
+                        <div className="timer-display">
+                          <div className="timer-unit">
+                            <span className="timer-number">{timeLeft.days}</span>
+                            <span className="timer-label">Days</span>
+                          </div>
+                          <div className="timer-separator">:</div>
+                          <div className="timer-unit">
+                            <span className="timer-number">{timeLeft.hours}</span>
+                            <span className="timer-label">Hours</span>
+                          </div>
+                          <div className="timer-separator">:</div>
+                          <div className="timer-unit">
+                            <span className="timer-number">{timeLeft.minutes}</span>
+                            <span className="timer-label">Minutes</span>
+                          </div>
+                          <div className="timer-separator">:</div>
+                          <div className="timer-unit">
+                            <span className="timer-number">{timeLeft.seconds}</span>
+                            <span className="timer-label">Seconds</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
             <div className="hero-stats">
               <div className="stat">
                 <span className="stat-number">2 Hours</span>
