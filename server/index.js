@@ -222,11 +222,10 @@ app.get('/linkedin-callback', async (req, res) => {
       throw new Error('No access token received from LinkedIn');
     }
 
-    // Get user profile from LinkedIn using basic profile API
-    const profileResponse = await fetch('https://api.linkedin.com/v2/people/~', {
+    // Get user profile from LinkedIn using OpenID Connect
+    const profileResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'X-Restli-Protocol-Version': '2.0.0'
+        'Authorization': `Bearer ${accessToken}`
       }
     });
 
@@ -241,13 +240,11 @@ app.get('/linkedin-callback', async (req, res) => {
     const profileData = await profileResponse.json();
     console.log('LinkedIn Profile Data:', profileData);
 
-    // Extract user information from basic profile response
-    const linkedinId = profileData.id;
-    const firstName = profileData.firstName?.localized?.en_US || 'LinkedIn';
-    const lastName = profileData.lastName?.localized?.en_US || 'User';
-    const name = `${firstName} ${lastName}`;
-    const email = `linkedin_${linkedinId}@vibecoding.local`;
-    const profilePicture = profileData.profilePicture?.displayImage?.elements?.[0]?.identifiers?.[0]?.identifier;
+    // Extract user information from OpenID Connect response
+    const linkedinId = profileData.sub; // Subject identifier
+    const name = profileData.name || 'LinkedIn User';
+    const email = profileData.email || `linkedin_${linkedinId}@vibecoding.local`;
+    const profilePicture = profileData.picture;
 
     // Create or find user
     let user = await User.findOne({ email });

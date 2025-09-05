@@ -4,8 +4,8 @@ class LinkedInAuthService {
   constructor() {
     this.clientId = process.env.REACT_APP_LINKEDIN_CLIENT_ID;
     this.redirectUri = process.env.REACT_APP_LINKEDIN_REDIRECT_URI || 'https://vibe-coding--library-management-806d9.asia-east1.hosted.app/linkedin-callback';
-    // Use basic scopes that are available by default
-    this.scope = 'openid';
+    // Use valid OpenID scopes as required by LinkedIn
+    this.scope = 'openid profile email';
   }
 
   // Generate LinkedIn OAuth URL
