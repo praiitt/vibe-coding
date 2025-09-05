@@ -1909,7 +1909,7 @@ section {
 .webinar-landing .hero {
     min-height: auto;
     background: none;
-    padding: 2.5rem 0 1.5rem;
+    padding: 1.5rem 0 1rem;
 }
 
 .webinar-landing .hero .hero-title {
@@ -1945,7 +1945,7 @@ section {
 .webinar-landing .hero .hero-buttons {
     display: flex !important;
     gap: 1rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     flex-wrap: wrap;
 }
 
@@ -1968,7 +1968,7 @@ section {
 
 /* Enhanced Agenda Section */
 .agenda {
-    padding: 4rem 0;
+    padding: 3rem 0;
     background: #f8f9fa;
 }
 
@@ -1999,9 +1999,9 @@ section {
 
 /* Hero Description */
 .hero-description {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
     color: rgba(255, 255, 255, 0.9);
     max-width: 600px;
 }
@@ -2009,8 +2009,8 @@ section {
 /* Hero Stats */
 .hero-stats {
     display: flex;
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 1.5rem;
+    margin-top: 1rem;
     justify-content: center;
     flex-wrap: wrap;
 }
@@ -2018,19 +2018,19 @@ section {
 .stat {
     text-align: center;
     background: rgba(255, 255, 255, 0.1);
-    padding: 1rem 1.5rem;
-    border-radius: 15px;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    min-width: 120px;
+    min-width: 100px;
 }
 
 .stat-number {
     display: block;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #4ecdc4;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.2rem;
 }
 
 .stat-label {
@@ -2041,7 +2041,7 @@ section {
 /* Agenda Header */
 .agenda-header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .section-subtitle {
@@ -2070,10 +2070,10 @@ section {
 
 .timeline-item {
     position: relative;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .timeline-item:nth-child(odd) {
@@ -2100,11 +2100,11 @@ section {
 .timeline-content {
     background: white;
     border-radius: 15px;
-    padding: 2rem;
+    padding: 1.5rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     flex: 1;
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     align-items: flex-start;
     border: 2px solid transparent;
     transition: all 0.3s ease;
