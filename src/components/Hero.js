@@ -34,10 +34,20 @@ const Hero = ({ showNotification }) => {
       const error = searchParams.get('error');
       const message = searchParams.get('message');
 
+      console.log('LinkedIn Success Debug:', {
+        linkedinSuccess,
+        token: token ? 'Present' : 'Missing',
+        userParam: userParam ? 'Present' : 'Missing',
+        error: error || 'None',
+        message: message || 'None',
+        allParams: Object.fromEntries(searchParams.entries())
+      });
+
       if (linkedinSuccess && token && userParam) {
         try {
           // Parse user data
           const userData = JSON.parse(decodeURIComponent(userParam));
+          console.log('Parsed user data:', userData);
 
           // Store token and user data
           localStorage.setItem('authToken', token);
