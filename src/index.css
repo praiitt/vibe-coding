@@ -1920,6 +1920,47 @@ section {
     color: #555;
 }
 
+.webinar-landing .hero .hero-buttons .btn {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.webinar-landing .hero .hero-buttons .btn-secondary {
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.webinar-landing .hero .hero-buttons .btn-secondary:hover {
+    background: #667eea;
+    color: white;
+}
+
+/* Debug styles to ensure button visibility */
+.webinar-landing .hero .hero-buttons {
+    display: flex !important;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.webinar-landing .hero .hero-buttons button {
+    min-width: 150px;
+    height: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    outline: none;
+}
+
 /* Tighter cards spacing for modern compact look */
 .webinar-landing .features-grid {
     gap: 1.25rem;

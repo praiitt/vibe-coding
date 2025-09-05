@@ -8,9 +8,13 @@ const WebinarLanding = () => {
   }, []);
 
   const scrollToAgenda = () => {
+    console.log('See Agenda button clicked!');
     const agendaElement = document.getElementById('agenda');
     if (agendaElement) {
+      console.log('Agenda element found, scrolling...');
       agendaElement.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      console.log('Agenda element not found!');
     }
   };
 
