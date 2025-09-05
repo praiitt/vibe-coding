@@ -19,7 +19,14 @@ const userSchema = new mongoose.Schema({
     required: function() {
       return !this.linkedinId; // Password required only if not LinkedIn user
     },
-    minlength: 6
+    validate: {
+      validator: function(v) {
+        // If password is provided, it must be at least 6 characters
+        // If no password (empty string), it's valid for OAuth users
+        return !v || v.length >= 6;
+      },
+      message: 'Password must be at least 6 characters long'
+    }
   },
   subscription: {
     type: {
@@ -75,7 +82,8 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password') || !this.password) return next();
+  // Skip password hashing if no password or if it's a LinkedIn user
+  if (!this.isModified('password') || !this.password || this.linkedinId) return next();
   
   try {
     const salt = await bcrypt.genSalt(10);
@@ -88,6 +96,10 @@ userSchema.pre('save', async function(next) {
 
 // Compare password method
 userSchema.methods.comparePassword = async function(candidatePassword) {
+  // LinkedIn users don't have passwords
+  if (this.linkedinId) {
+    return false;
+  }
   return bcrypt.compare(candidatePassword, this.password);
 };
 
