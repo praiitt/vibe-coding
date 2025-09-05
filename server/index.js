@@ -191,7 +191,12 @@ app.get('/linkedin-callback', async (req, res) => {
     }
 
     // Exchange code for access token
-    const configuredRedirectUri = (process.env.LINKEDIN_REDIRECT_URI || 'https://vibe-coding--library-management-806d9.asia-east1.hosted.app/linkedin-callback').trim();
+    const defaultLinkedInRedirect = 'https://vibe-coding--library-management-806d9.asia-east1.hosted.app/linkedin-callback';
+    let configuredRedirectUri = (process.env.LINKEDIN_REDIRECT_URI || defaultLinkedInRedirect).trim().replace(/^"|"$/g, '');
+    if ([" ", "\n", "\r", "\t"].some(ch => configuredRedirectUri.includes(ch)) || configuredRedirectUri.includes('%')) {
+      console.warn('Invalid characters found in LINKEDIN_REDIRECT_URI; falling back to default. Value was:', JSON.stringify(process.env.LINKEDIN_REDIRECT_URI));
+      configuredRedirectUri = defaultLinkedInRedirect;
+    }
     console.log('LinkedIn Token Exchange using redirect_uri:', configuredRedirectUri);
     const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
       method: 'POST',
