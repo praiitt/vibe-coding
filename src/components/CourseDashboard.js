@@ -213,7 +213,7 @@ const CourseDashboard = ({ user, showNotification }) => {
     setIsRegistering(true);
     try {
       await apiService.registerForCourse(course.id, course.title);
-      showNotification(`🎉 Successfully registered for ${course.title}! We'll get back to you soon with course details.`, 'success');
+      showNotification(`🎉 Successfully registered for ${course.title}! We'll contact you soon!`, 'success');
       await loadRegisteredCourses(); // Refresh the registered courses list
     } catch (error) {
       console.error('Error registering for course:', error);
@@ -316,18 +316,20 @@ const CourseDashboard = ({ user, showNotification }) => {
                 </ul>
               </div>
 
-              <button 
-                className="btn btn-primary"
-                onClick={() => handleCourseSelect(course)}
-                disabled={isRegistering}
-              >
-                {isRegistering ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin" style={{ marginRight: '8px' }}></i>
-                    Registering...
-                  </>
-                ) : registeredCourses.some(reg => reg.courseId === course.id) ? 'Continue Learning' : 'Register Course'}
-              </button>
+              {!registeredCourses.some(reg => reg.courseId === course.id) && (
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => handleCourseSelect(course)}
+                  disabled={isRegistering}
+                >
+                  {isRegistering ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin" style={{ marginRight: '8px' }}></i>
+                      Registering...
+                    </>
+                  ) : 'Register Course'}
+                </button>
+              )}
             </div>
           ))}
         </div>

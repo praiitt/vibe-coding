@@ -36,7 +36,7 @@ export async function openRazorpayCheckout({ name, email, phone, experience, goa
       order_id: orderResponse.orderId,
       name: 'Vibe Coding Webinar',
       description: 'Registration Fee',
-      image: '/favicon.ico',
+      image: '/vibe-coding-logo _cropped.png',
       handler: function (response) {
         onSuccess?.(response);
       },
@@ -84,7 +84,7 @@ export async function openSubscriptionCheckout(plan, options) {
       order_id: orderResponse.orderId,
       name: 'Vibe Coding',
       description: `${plan} Subscription`,
-      image: '/favicon.ico',
+      image: '/vibe-coding-logo _cropped.png',
       handler: function (response) {
         options.onSuccess?.(response);
       },

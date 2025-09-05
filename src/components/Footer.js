@@ -19,7 +19,7 @@ const Footer = () => {
         <div className="footer-content">
           <div className="footer-section">
             <div className="footer-logo">
-              <i className="fas fa-code"></i>
+              <img src="/vibe-coding-logo _cropped.png" alt="Vibe Coding" className="footer-logo-img" />
               <span>vibe-coding.lifestyle</span>
             </div>
             <p>Transforming coding from a job into a lifestyle. Join the global movement of creative developers.</p>

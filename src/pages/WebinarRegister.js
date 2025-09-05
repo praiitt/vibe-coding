@@ -89,7 +89,27 @@ const WebinarRegister = () => {
       });
     } catch (err) {
       console.error(err);
-      alert('Registration failed: ' + err.message);
+      
+      // Better error handling with specific messages
+      let errorMessage = 'Registration failed. Please try again.';
+      
+      if (err.message.includes('already registered')) {
+        errorMessage = '✅ You\'re already registered for this webinar!';
+      } else if (err.message.includes('Invalid email')) {
+        errorMessage = '❌ Please provide a valid email address.';
+      } else if (err.message.includes('Name')) {
+        errorMessage = '❌ Please provide your full name.';
+      } else if (err.message.includes('Phone')) {
+        errorMessage = '❌ Please provide a valid phone number.';
+      } else if (err.message.includes('Experience')) {
+        errorMessage = '❌ Please select your experience level.';
+      } else if (err.message.includes('Goals')) {
+        errorMessage = '❌ Please tell us about your goals.';
+      } else if (err.message.includes('Payment')) {
+        errorMessage = '❌ Payment processing failed. Please try again.';
+      }
+      
+      alert(errorMessage);
     } finally {
       setSubmitting(false);
     }

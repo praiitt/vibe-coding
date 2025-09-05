@@ -128,6 +128,14 @@ class ApiService {
   async getMyCourses() {
     return this.request('/api/courses/my-courses');
   }
+
+  // LinkedIn Authentication
+  async linkedinAuth(code) {
+    return this.request('/api/auth/linkedin', {
+      method: 'POST',
+      body: JSON.stringify({ code }),
+    });
+  }
 }
 
 export const apiService = new ApiService();

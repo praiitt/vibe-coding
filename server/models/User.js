@@ -16,7 +16,9 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: function() {
+      return !this.linkedinId; // Password required only if not LinkedIn user
+    },
     minlength: 6
   },
   subscription: {
@@ -57,6 +59,14 @@ const userSchema = new mongoose.Schema({
       max: 100
     }
   }],
+  linkedinId: {
+    type: String,
+    unique: true,
+    sparse: true // Allows multiple null values
+  },
+  profilePicture: {
+    type: String
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -65,7 +75,7 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password') || !this.password) return next();
   
   try {
     const salt = await bcrypt.genSalt(10);

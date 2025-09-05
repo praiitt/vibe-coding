@@ -77,8 +77,9 @@ const Navbar = ({ onLoginClick }) => {
       <nav className="navbar desktop-nav">
         <div className="nav-container">
           <div className="nav-logo">
-            <i className="fas fa-code"></i>
-            <span>vibe-coding.lifestyle</span>
+            <Link to="/" onClick={closeMenu}>
+              <img src="/vibe-coding-logo _cropped.png" alt="Vibe Coding" className="nav-logo-img" />
+            </Link>
           </div>
           
           <ul className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>

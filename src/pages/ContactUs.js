@@ -137,17 +137,21 @@ const ContactUs = () => {
             <div className="social-links">
               <h3>Follow Us</h3>
               <div className="social-icons">
-                <a href="#" className="social-link">
-                  <i className="fab fa-twitter"></i>
+                {/* Instagram */}
+                <a href="https://www.instagram.com/absolutedimension1111/" className="social-link" target="_blank" rel="noreferrer" title="Instagram - Absolute Dimension">
+                  <i className="fab fa-instagram"></i>
                 </a>
-                <a href="#" className="social-link">
+                {/* LinkedIn */}
+                <a href="https://www.linkedin.com/company/absolute-dimension-pvt-ltd/posts/?feedView=all" className="social-link" target="_blank" rel="noreferrer" title="LinkedIn - Absolute Dimension Pvt Ltd">
                   <i className="fab fa-linkedin"></i>
                 </a>
-                <a href="#" className="social-link">
-                  <i className="fab fa-github"></i>
+                {/* Facebook */}
+                <a href="https://www.facebook.com/AbsoluteDimension" className="social-link" target="_blank" rel="noreferrer" title="Facebook - Absolute Dimension">
+                  <i className="fab fa-facebook"></i>
                 </a>
-                <a href="#" className="social-link">
-                  <i className="fab fa-discord"></i>
+                {/* GitHub placeholder - update if you want to showcase repos */}
+                <a href="#" className="social-link" title="GitHub (Coming soon)">
+                  <i className="fab fa-github"></i>
                 </a>
               </div>
             </div>

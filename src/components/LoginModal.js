@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { linkedinAuthService } from '../services/linkedinAuth';
 
 const LoginModal = ({ isOpen, onClose, onLogin, showNotification }) => {
-  const { signup, login } = useAuth();
+  const { signup, login, loginWithLinkedIn } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -10,6 +11,7 @@ const LoginModal = ({ isOpen, onClose, onLogin, showNotification }) => {
     password: ''
   });
   const [submitting, setSubmitting] = useState(false);
+  // const [captchaVerified, setCaptchaVerified] = useState(false);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -18,8 +20,26 @@ const LoginModal = ({ isOpen, onClose, onLogin, showNotification }) => {
     });
   };
 
+  // const onCaptchaSuccess = () => {
+  //   setCaptchaVerified(true);
+  // };
+
+  const handleLinkedInLogin = async () => {
+    try {
+      linkedinAuthService.loginWithLinkedIn();
+    } catch (error) {
+      console.error('LinkedIn login error:', error);
+      showNotification('❌ LinkedIn login failed. Please try again.', 'error');
+    }
+  };
+
   const handleEmailAuth = async (e) => {
     e.preventDefault();
+    // For testing purposes, skip reCAPTCHA validation
+    // if (!captchaVerified) {
+    //   showNotification('Please verify the captcha before continuing.', 'error');
+    //   return;
+    // }
     setSubmitting(true);
     try {
       let response;
@@ -34,7 +54,23 @@ const LoginModal = ({ isOpen, onClose, onLogin, showNotification }) => {
       onClose();
     } catch (error) {
       console.error('Auth error:', error);
-      showNotification(error.message || 'Authentication failed', 'error');
+      
+      // Better error handling with specific messages
+      let errorMessage = 'Authentication failed. Please try again.';
+      
+      if (error.message.includes('already exists')) {
+        errorMessage = '✅ This email is already registered. Please try logging in instead.';
+      } else if (error.message.includes('Invalid credentials')) {
+        errorMessage = '❌ Invalid email or password. Please check your credentials.';
+      } else if (error.message.includes('Email')) {
+        errorMessage = '❌ Please provide a valid email address.';
+      } else if (error.message.includes('Password')) {
+        errorMessage = '❌ Password must be at least 6 characters long.';
+      } else if (error.message.includes('Name')) {
+        errorMessage = '❌ Please provide your full name.';
+      }
+      
+      showNotification(errorMessage, 'error');
     } finally {
       setSubmitting(false);
     }
@@ -83,14 +119,24 @@ const LoginModal = ({ isOpen, onClose, onLogin, showNotification }) => {
           
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-              placeholder="Enter your password"
+                          <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                placeholder="Enter your password"
+                autoComplete="current-password"
+              />
+          </div>
+
+          {/* reCAPTCHA widget */}
+          <div className="form-group" style={{ display: 'flex', justifyContent: 'center' }}>
+            <div
+              className="g-recaptcha"
+              data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+              data-callback={() => {/* onCaptchaSuccess() */}}
             />
           </div>
           
@@ -98,6 +144,19 @@ const LoginModal = ({ isOpen, onClose, onLogin, showNotification }) => {
             {submitting ? (isSignUp ? 'Creating...' : 'Signing in...') : (isSignUp ? 'Create Account' : 'Sign In')}
           </button>
         </form>
+
+        <div className="auth-divider">
+          <span>or</span>
+        </div>
+
+        <button 
+          className="btn btn-linkedin" 
+          onClick={handleLinkedInLogin}
+          disabled={submitting}
+        >
+          <i className="fab fa-linkedin"></i>
+          {isSignUp ? 'Sign up with LinkedIn' : 'Sign in with LinkedIn'}
+        </button>
 
         <div className="auth-switch">
           <p>

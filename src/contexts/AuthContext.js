@@ -34,6 +34,17 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const loginWithLinkedIn = async (code) => {
+    try {
+      const response = await apiService.linkedinAuth(code);
+      localStorage.setItem('authToken', response.token);
+      setUser(response.user);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const checkAuthStatus = async () => {
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -58,6 +69,7 @@ export const AuthProvider = ({ children }) => {
     signup,
     login,
     logout,
+    loginWithLinkedIn,
   };
 
   return (

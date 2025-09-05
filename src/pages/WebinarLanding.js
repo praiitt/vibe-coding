@@ -154,22 +154,18 @@ const WebinarLanding = () => {
         </div>
 
         <div className="platforms">
-          <h2 className="section-title">Vibe Coding Platforms We’ll Use</h2>
+          <h2 className="section-title">Vibe Coding Platforms — Pick Your Flow</h2>
+          <p className="section-subtitle">Whether you write code daily or you’re non‑technical, we’ve got a powerful path for you.</p>
           <div className="features-grid">
             <div className="feature-card">
               <div className="feature-icon"><i className="fas fa-terminal" /></div>
-              <h3>Cursor</h3>
-              <p>AI-first IDE to code with copilots, edit entire repos, and accelerate implementation with context-aware changes.</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon"><i className="fas fa-heart" /></div>
-              <h3>Lovable</h3>
-              <p>Generate full-stack apps from prompts, then refine with powerful UI and data tools—perfect for MVPs.</p>
+              <h3>For Coders: Cursor</h3>
+              <p>AI‑first IDE for developers. Pair with copilots, refactor whole repos, and ship faster with context‑aware edits and agentic commands. Perfect if you want to code live.</p>
             </div>
             <div className="feature-card">
               <div className="feature-icon"><i className="fas fa-rocket" /></div>
-              <h3>Emergent.sh</h3>
-              <p>Agentic workflows for building and iterating features end‑to‑end—design, code, deploy in loops.</p>
+              <h3>For Non‑Coders: Emergent.sh</h3>
+              <p>No-code/low‑code agentic workflows. Describe what you want; agents plan, build, and iterate end‑to‑end—design → code → deploy—so you can focus on your idea, not syntax.</p>
             </div>
           </div>
         </div>

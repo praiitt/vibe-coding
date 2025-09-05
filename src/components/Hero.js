@@ -4,7 +4,7 @@ import { analyticsService } from '../services/analytics';
 import { apiService } from '../services/api';
 
 const Hero = ({ showNotification }) => {
-  const [ref, inView] = useInView({
+  const [inViewRef, inView] = useInView({
     threshold: 0.5,
     triggerOnce: true
   });
@@ -18,6 +18,7 @@ const Hero = ({ showNotification }) => {
     interests: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [joinCaptchaVerified, setJoinCaptchaVerified] = useState(false);
 
   useEffect(() => {
     if (inView && statsRef.current) {
@@ -56,23 +57,18 @@ const Hero = ({ showNotification }) => {
   };
 
   const handleJoinMovement = async () => {
-    // Track button click
     await analyticsService.trackEvent('hero_join_movement_clicked', {
       section: 'hero',
       action: 'open_join_modal'
     });
-
     setShowJoinModal(true);
   };
 
   const handleJoinWebinar = async () => {
-    // Track button click
     await analyticsService.trackEvent('hero_join_webinar_clicked', {
       section: 'hero',
       action: 'navigate_to_webinar'
     });
-
-    // Navigate to webinar page
     window.location.href = '/webinar';
   };
 
@@ -85,19 +81,24 @@ const Hero = ({ showNotification }) => {
 
   const handleJoinFormSubmit = async (e) => {
     e.preventDefault();
+    
+    // For testing purposes, skip reCAPTCHA validation
+    // if (!joinCaptchaVerified) {
+    //   showNotification('Please verify the captcha before submitting.', 'error');
+    //   return;
+    // }
+    
     setIsSubmitting(true);
 
     try {
-      // Save to database via contact API
       await apiService.submitContactForm({
         name: joinForm.name,
         email: joinForm.email,
+        subject: 'Join the Vibe Movement',
         message: `Phone: ${joinForm.phone}\nInterests: ${joinForm.interests}\n\nJoined via Hero section`
       });
 
       showNotification('🎉 Welcome to the Vibe! Your details have been saved to our database. We\'ll connect with you soon!', 'success');
-      
-      // Track successful join
       await analyticsService.trackEvent('hero_join_movement_completed', {
         section: 'hero',
         action: 'form_submitted',
@@ -105,12 +106,27 @@ const Hero = ({ showNotification }) => {
         email: joinForm.email
       });
 
-      // Reset form and close modal
       setJoinForm({ name: '', email: '', phone: '', interests: '' });
       setShowJoinModal(false);
     } catch (error) {
       console.error('Error joining movement:', error);
-      showNotification('❌ Failed to join the movement. Please try again.', 'error');
+      
+      // Better error handling with specific messages
+      let errorMessage = '❌ Failed to join the movement. Please try again.';
+      
+      if (error.message.includes('Subject must be at least')) {
+        errorMessage = '❌ Please provide a valid subject.';
+      } else if (error.message.includes('Email')) {
+        errorMessage = '❌ Please provide a valid email address.';
+      } else if (error.message.includes('Name')) {
+        errorMessage = '❌ Please provide your full name.';
+      } else if (error.message.includes('Message must be at least')) {
+        errorMessage = '❌ Please provide more details about your interests.';
+      } else if (error.message.includes('already exists')) {
+        errorMessage = '✅ You\'re already part of the movement! Welcome back!';
+      }
+      
+      showNotification(errorMessage, 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -118,7 +134,7 @@ const Hero = ({ showNotification }) => {
 
   return (
     <section id="home" className="hero">
-      <div className="hero-container">
+      <div className="hero-container" ref={inViewRef}>
         <div className="hero-content">
           <h1 className="hero-title">
             Welcome to the
@@ -250,6 +266,15 @@ const Hero = ({ showNotification }) => {
                   <option value="community">Community & Networking</option>
                   <option value="all">All of the above</option>
                 </select>
+              </div>
+
+              {/* reCAPTCHA widget */}
+              <div className="form-group" style={{ display: 'flex', justifyContent: 'center' }}>
+                <div
+                  className="g-recaptcha"
+                  data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                  data-callback={() => {/* setJoinCaptchaVerified(true) */}}
+                />
               </div>
               
               <button type="submit" className="btn btn-primary" disabled={isSubmitting}>

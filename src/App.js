@@ -20,6 +20,7 @@ import TermsAndConditions from './pages/TermsAndConditions';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import CancellationRefundPolicy from './pages/CancellationRefundPolicy';
 import ProtectedRoute from './components/ProtectedRoute';
+import LinkedInCallback from './components/LinkedInCallback';
 import { useNotification } from './hooks/useNotification';
 import { useAuth } from './contexts/AuthContext';
 
@@ -93,6 +94,7 @@ function App() {
           <Route path="/webinar" element={<WebinarLanding />} />
           <Route path="/webinar/register" element={<WebinarRegister />} />
           <Route path="/webinar/success" element={<WebinarSuccess />} />
+          <Route path="/linkedin-callback" element={<LinkedInCallback showNotification={showNotification} />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/terms" element={<TermsAndConditions />} />
