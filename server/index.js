@@ -205,32 +205,49 @@ app.get('/linkedin-callback', async (req, res) => {
       })
     });
 
+    console.log('Token Response Status:', tokenResponse.status);
+    console.log('Token Response Headers:', Object.fromEntries(tokenResponse.headers.entries()));
+
     if (!tokenResponse.ok) {
-      throw new Error('Failed to exchange code for access token');
+      const errorText = await tokenResponse.text();
+      console.error('Token Exchange Error:', errorText);
+      throw new Error(`Failed to exchange code for access token: ${tokenResponse.status} - ${errorText}`);
     }
 
     const tokenData = await tokenResponse.json();
+    console.log('Token Data:', tokenData);
     const accessToken = tokenData.access_token;
 
-    // Get user profile from LinkedIn using OpenID Connect
-    const profileResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
+    if (!accessToken) {
+      throw new Error('No access token received from LinkedIn');
+    }
+
+    // Get user profile from LinkedIn using basic profile API
+    const profileResponse = await fetch('https://api.linkedin.com/v2/people/~', {
       headers: {
-        'Authorization': `Bearer ${accessToken}`
+        'Authorization': `Bearer ${accessToken}`,
+        'X-Restli-Protocol-Version': '2.0.0'
       }
     });
 
+    console.log('Profile Response Status:', profileResponse.status);
+
     if (!profileResponse.ok) {
-      throw new Error('Failed to fetch LinkedIn profile');
+      const errorText = await profileResponse.text();
+      console.error('Profile Fetch Error:', errorText);
+      throw new Error(`Failed to fetch LinkedIn profile: ${profileResponse.status} - ${errorText}`);
     }
 
     const profileData = await profileResponse.json();
     console.log('LinkedIn Profile Data:', profileData);
 
-    // Extract user information from OpenID Connect response
-    const linkedinId = profileData.sub; // Subject identifier
-    const name = profileData.name || 'LinkedIn User';
-    const email = profileData.email || `linkedin_${linkedinId}@vibecoding.local`;
-    const profilePicture = profileData.picture;
+    // Extract user information from basic profile response
+    const linkedinId = profileData.id;
+    const firstName = profileData.firstName?.localized?.en_US || 'LinkedIn';
+    const lastName = profileData.lastName?.localized?.en_US || 'User';
+    const name = `${firstName} ${lastName}`;
+    const email = `linkedin_${linkedinId}@vibecoding.local`;
+    const profilePicture = profileData.profilePicture?.displayImage?.elements?.[0]?.identifiers?.[0]?.identifier;
 
     // Create or find user
     let user = await User.findOne({ email });
