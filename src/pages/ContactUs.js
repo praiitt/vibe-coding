@@ -25,13 +25,17 @@ const ContactUs = () => {
     setIsSubmitting(true);
     setSubmitStatus(null);
 
+    const formData = {
+      name: form.name,
+      email: form.email,
+      subject: form.subject,
+      message: form.message
+    };
+    
+    console.log('Form data being sent:', formData);
+
     try {
-      await apiService.submitContactForm({
-        name: form.name,
-        email: form.email,
-        subject: form.subject,
-        message: form.message
-      });
+      await apiService.submitContactForm(formData);
 
       setSubmitStatus('success');
       setForm({ name: '', email: '', subject: '', message: '' });

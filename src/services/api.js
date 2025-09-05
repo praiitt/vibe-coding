@@ -21,11 +21,14 @@ class ApiService {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
+    console.log('API Request:', { url, config });
+
     try {
       const response = await fetch(url, config);
       const data = await response.json();
 
       if (!response.ok) {
+        console.error('API Error Response:', { status: response.status, data });
         throw new Error(data.error || 'Request failed');
       }
 
@@ -57,6 +60,7 @@ class ApiService {
 
   // Contact form
   async submitContactForm(contactData) {
+    console.log('API Service - Contact data:', contactData);
     return this.request('/api/contact', {
       method: 'POST',
       body: JSON.stringify(contactData),
