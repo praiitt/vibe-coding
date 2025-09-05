@@ -1,10 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const WebinarLanding = () => {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
+
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // Countdown timer effect
+  useEffect(() => {
+    // Set the end date (5 days from now)
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 5);
+    endDate.setHours(23, 59, 59, 999); // End of day
+
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = endDate.getTime() - now;
+
+      if (distance > 0) {
+        setTimeLeft({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000)
+        });
+      } else {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const scrollToAgenda = () => {
@@ -28,8 +62,44 @@ const WebinarLanding = () => {
               <span>Live Session</span>
             </div>
             <h1 className="hero-title">Vibe Coding: Build an MVP Live in One Session</h1>
-            <p className="hero-subtitle">21 September, 1:00 PM IST • Live Online • ₹99</p>
+            <div className="pricing-info">
+              <div className="price-container">
+                <span className="original-price">₹999</span>
+                <span className="discounted-price">₹99</span>
+                <span className="discount-badge">90% OFF</span>
+              </div>
+              <p className="hero-subtitle">21 September, 1:00 PM IST • Live Online</p>
+            </div>
             <p className="hero-description">How vibe coding, AI-native tools, and creative flow will change how software is built—fast, collaborative, and joyful.</p>
+            
+            <div className="countdown-timer">
+              <div className="timer-header">
+                <i className="fas fa-clock"></i>
+                <span>Limited Time Offer - Registration Closes In:</span>
+              </div>
+              <div className="timer-display">
+                <div className="timer-unit">
+                  <span className="timer-number">{timeLeft.days}</span>
+                  <span className="timer-label">Days</span>
+                </div>
+                <div className="timer-separator">:</div>
+                <div className="timer-unit">
+                  <span className="timer-number">{timeLeft.hours}</span>
+                  <span className="timer-label">Hours</span>
+                </div>
+                <div className="timer-separator">:</div>
+                <div className="timer-unit">
+                  <span className="timer-number">{timeLeft.minutes}</span>
+                  <span className="timer-label">Minutes</span>
+                </div>
+                <div className="timer-separator">:</div>
+                <div className="timer-unit">
+                  <span className="timer-number">{timeLeft.seconds}</span>
+                  <span className="timer-label">Seconds</span>
+                </div>
+              </div>
+            </div>
+
             <div className="hero-buttons">
               <Link className="btn btn-primary" to="/webinar/register">
                 <i className="fas fa-rocket"></i>
@@ -284,7 +354,14 @@ const WebinarLanding = () => {
 
         <div className="cta">
           <h2 className="section-title">Build an MVP With Us — Live</h2>
-          <p style={{ textAlign: 'center', marginBottom: '1rem', color: '#666' }}>Limited seats • Recording included • Community access</p>
+          <div className="cta-pricing">
+            <div className="cta-price-container">
+              <span className="cta-original-price">₹999</span>
+              <span className="cta-discounted-price">₹99</span>
+              <span className="cta-discount-badge">90% OFF</span>
+            </div>
+            <p className="cta-subtitle">Limited seats • Recording included • Community access</p>
+          </div>
           <Link className="btn btn-primary" to="/webinar/register">Register Now for ₹99</Link>
         </div>
       </div>
