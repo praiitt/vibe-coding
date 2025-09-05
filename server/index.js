@@ -191,6 +191,7 @@ app.get('/linkedin-callback', async (req, res) => {
     }
 
     // Exchange code for access token
+    const configuredRedirectUri = process.env.LINKEDIN_REDIRECT_URI || `${process.env.FRONTEND_URL || 'http://localhost:3000'}/linkedin-callback`;
     const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
       method: 'POST',
       headers: {
@@ -201,7 +202,7 @@ app.get('/linkedin-callback', async (req, res) => {
         code: code,
         client_id: process.env.LINKEDIN_CLIENT_ID,
         client_secret: process.env.LINKEDIN_CLIENT_SECRET,
-        redirect_uri: process.env.LINKEDIN_REDIRECT_URI
+        redirect_uri: configuredRedirectUri
       })
     });
 
