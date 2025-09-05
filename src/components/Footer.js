@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const scrollToSection = (sectionId) => {
@@ -22,6 +23,7 @@ const Footer = () => {
               <span>vibe-coding.lifestyle</span>
             </div>
             <p>Transforming coding from a job into a lifestyle. Join the global movement of creative developers.</p>
+            <p className="company-info">A product of <strong>Absolute Dimension Pvt Ltd</strong></p>
             <div className="social-links">
               <a href="#" aria-label="Twitter">
                 <i className="fab fa-twitter"></i>
@@ -56,12 +58,19 @@ const Footer = () => {
             </ul>
           </div>
           <div className="footer-section">
-            <h4>Movement</h4>
+            <h4>Support</h4>
             <ul>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Terms of Service</a></li>
-              <li><a href="#">Community Guidelines</a></li>
-              <li><a href="#">Lifestyle Manifesto</a></li>
+              <li><Link to="/contact">Contact Us</Link></li>
+              <li><Link to="/faq">FAQ</Link></li>
+              <li><Link to="/webinar">Webinar</Link></li>
+            </ul>
+          </div>
+          <div className="footer-section">
+            <h4>Legal</h4>
+            <ul>
+              <li><Link to="/terms">Terms & Conditions</Link></li>
+              <li><Link to="/privacy">Privacy Policy</Link></li>
+              <li><Link to="/cancellation-refund">Cancellation/Refund Policy</Link></li>
             </ul>
           </div>
         </div>

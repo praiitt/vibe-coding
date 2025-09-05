@@ -104,7 +104,7 @@ const WebinarRegister = () => {
           <div className="webinar-details">
             <div className="detail-item">
               <i className="fas fa-calendar-alt"></i>
-              <span>22 September, 7:00 PM IST</span>
+              <span>21 September, 1:00 PM IST</span>
             </div>
             <div className="detail-item">
               <i className="fas fa-rupee-sign"></i>

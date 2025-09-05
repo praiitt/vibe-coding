@@ -84,6 +84,7 @@ const Navbar = ({ onLoginClick }) => {
           <li><a href="#features" onClick={() => scrollToSection('features')}>Features</a></li>
           <li><a href="#curriculum" onClick={() => scrollToSection('curriculum')}>Curriculum</a></li>
           <li><Link to="/webinar" onClick={() => handleLinkClick('webinar')}>Webinar</Link></li>
+          <li><Link to="/contact" onClick={() => handleLinkClick('contact')}>Contact</Link></li>
           {user ? (
             <>
               <li><Link to="/dashboard" onClick={() => handleLinkClick('dashboard')}>Dashboard</Link></li>

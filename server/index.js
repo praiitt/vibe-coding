@@ -166,6 +166,7 @@ app.get('/api/auth/me', auth, async (req, res) => {
 app.post('/api/contact', [
   body('name').trim().isLength({ min: 2 }).withMessage('Name must be at least 2 characters'),
   body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
+  body('subject').trim().isLength({ min: 3 }).withMessage('Subject must be at least 3 characters'),
   body('message').trim().isLength({ min: 10 }).withMessage('Message must be at least 10 characters')
 ], async (req, res) => {
   try {
@@ -174,9 +175,9 @@ app.post('/api/contact', [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, message } = req.body;
+    const { name, email, subject, message } = req.body;
 
-    const contact = new Contact({ name, email, message });
+    const contact = new Contact({ name, email, subject, message });
     await contact.save();
 
     res.status(201).json({ message: 'Contact form submitted successfully' });

@@ -685,6 +685,16 @@ section {
     margin-bottom: 1.5rem;
 }
 
+.company-info {
+    color: #4ecdc4 !important;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(78, 205, 196, 0.1);
+    border-radius: 8px;
+    border-left: 3px solid #4ecdc4;
+}
+
 .social-links {
     display: flex;
     gap: 1rem;
@@ -894,7 +904,7 @@ section {
 
 /* Course Dashboard Styles */
 .course-dashboard {
-    padding: 2rem 0;
+    padding: 6rem 0 2rem 0;
     background: #f8f9fa;
     min-height: 100vh;
 }
@@ -969,6 +979,9 @@ section {
     padding: 2rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
 }
 
 .course-card:hover {
@@ -976,10 +989,16 @@ section {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
+.course-card .btn {
+    margin-top: auto;
+    align-self: flex-start;
+}
+
 .course-header {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    flex-shrink: 0;
 }
 
 .course-icon {
@@ -994,17 +1013,26 @@ section {
     color: white;
 }
 
+.course-info {
+    flex: 1;
+    min-width: 0;
+}
+
 .course-info h3 {
     font-size: 1.3rem;
     font-weight: 600;
     color: #333;
     margin-bottom: 0.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .course-info p {
     color: #666;
     margin-bottom: 1rem;
     line-height: 1.5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .course-meta {
@@ -1059,8 +1087,28 @@ section {
     color: #666;
 }
 
+.registration-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #e6ffe6;
+    color: #28a745;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 0.8rem;
+    width: fit-content;
+    border: 1px solid #28a745;
+}
+
+.registration-status i {
+    color: #28a745;
+}
+
 .course-modules {
     margin-bottom: 1.5rem;
+    flex-grow: 1;
 }
 
 .course-modules h4 {
@@ -1072,6 +1120,8 @@ section {
 
 .course-modules ul {
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .course-modules li {
@@ -1080,16 +1130,25 @@ section {
     align-items: center;
     padding: 0.5rem 0;
     border-bottom: 1px solid #f0f0f0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.course-modules li:last-child {
+    border-bottom: none;
 }
 
 .module-title {
     font-size: 0.9rem;
     color: #333;
+    flex: 1;
+    margin-right: 1rem;
 }
 
 .module-lessons {
     font-size: 0.8rem;
     color: #666;
+    white-space: nowrap;
 }
 
 /* Course Content Styles */
@@ -1449,6 +1508,10 @@ section {
 
 /* Responsive Course Design */
 @media (max-width: 768px) {
+    .course-dashboard {
+        padding: 5rem 0 2rem;
+    }
+    
     .course-content {
         flex-direction: column;
     }
@@ -1824,7 +1887,7 @@ section {
 
 /* Webinar landing layout tweaks */
 .webinar-landing {
-    padding: 3rem 0 4rem;
+    padding: 7rem 0 4rem;
 }
 
 .webinar-landing .container {
@@ -1852,7 +1915,537 @@ section {
     gap: 1.25rem;
 }
 
-/* Compact agenda list */
+/* Enhanced Agenda Section */
+.agenda {
+    padding: 4rem 0;
+    background: #f8f9fa;
+}
+
+.agenda-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.agenda-item {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    border: 2px solid transparent;
+}
+
+.agenda-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: #667eea;
+}
+
+.agenda-item.featured {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #4ecdc4;
+    transform: scale(1.02);
+}
+
+.agenda-item.featured:hover {
+    transform: scale(1.05) translateY(-5px);
+}
+
+.agenda-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.agenda-item.featured .agenda-icon {
+    background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+}
+
+.agenda-content h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.agenda-item.featured .agenda-content h3 {
+    color: white;
+}
+
+.agenda-content p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.agenda-item.featured .agenda-content p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.build-flow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.flow-step {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: white;
+}
+
+.build-flow i {
+    color: #4ecdc4;
+    font-size: 0.8rem;
+}
+
+.deliverable-card {
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(255, 107, 107, 0.3);
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.deliverable-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.deliverable-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+.deliverable-content {
+    position: relative;
+    z-index: 2;
+}
+
+.deliverable-content h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.deliverable-content p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+/* Contact Us Page Styles */
+.contact-us {
+    padding: 8rem 0 4rem;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.contact-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.contact-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.contact-header p {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.contact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.contact-info h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.contact-details {
+    margin-bottom: 3rem;
+}
+
+.contact-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.contact-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.contact-text h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.contact-text p {
+    color: #666;
+    margin: 0;
+}
+
+.social-links h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.contact-form-container {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.contact-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.contact-form .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.contact-form .form-group input,
+.contact-form .form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e1e5e9;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    color: #333;
+}
+
+.contact-form .form-group input:focus,
+.contact-form .form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+.contact-form .form-group input:hover,
+.contact-form .form-group textarea:hover {
+    border-color: #667eea;
+    background: white;
+}
+
+.contact-form .form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* FAQ Page Styles */
+.faq {
+    padding: 8rem 0 4rem;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.faq-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.faq-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.faq-header p {
+    font-size: 1.2rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.faq-header a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.faq-header a:hover {
+    text-decoration: underline;
+}
+
+.faq-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-category {
+    margin-bottom: 3rem;
+}
+
+.category-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+}
+
+.category-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+.faq-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.faq-item {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.faq-question {
+    width: 100%;
+    padding: 1.5rem;
+    background: white;
+    border: none;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.faq-question:hover {
+    background: #f8f9fa;
+}
+
+.faq-question.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.faq-question i {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.faq-answer.active {
+    max-height: 200px;
+}
+
+.faq-answer p {
+    padding: 0 1.5rem 1.5rem;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.faq-cta {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 3rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.faq-cta h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.faq-cta p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+/* Compact agenda list - legacy */
 .webinar-landing .agenda .module-content li {
     padding: 0.35rem 0;
 }
@@ -1869,7 +2462,7 @@ section {
 
 @media (max-width: 768px) {
     .webinar-landing {
-        padding: 2rem 0 3rem;
+        padding: 6rem 0 3rem;
     }
     .webinar-landing .container {
         padding: 0 12px;
@@ -1881,11 +2474,53 @@ section {
     .webinar-landing .hero .hero-subtitle {
         font-size: 1rem;
     }
+    
+    .agenda-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .agenda-item {
+        padding: 1.5rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .agenda-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        margin: 0 auto;
+    }
+    
+    .build-flow {
+        justify-content: center;
+    }
+    
+    .deliverable-card {
+        padding: 2rem;
+        margin: 0 1rem;
+    }
+    
+    .deliverable-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .deliverable-content h3 {
+        font-size: 1.5rem;
+    }
+    
+    .deliverable-content p {
+        font-size: 1rem;
+    }
 }
 
 /* Webinar Registration Styles */
 .webinar-register {
-    padding: 4rem 0;
+    padding: 8rem 0 4rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     position: relative;
@@ -2158,6 +2793,14 @@ section {
 
 /* Responsive Design for Webinar */
 @media (max-width: 768px) {
+    .webinar-register {
+        padding: 6rem 0 2rem;
+    }
+    
+    .webinar-success {
+        padding: 6rem 0 2rem;
+    }
+    
     .webinar-content {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -2185,7 +2828,7 @@ section {
 
 /* Webinar Success Page Styles */
 .webinar-success {
-    padding: 4rem 0;
+    padding: 8rem 0 4rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     color: white;

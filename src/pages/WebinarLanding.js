@@ -13,7 +13,7 @@ const WebinarLanding = () => {
         <div className="hero">
           <div className="hero-content">
             <h1 className="hero-title">Vibe Coding: Build an MVP Live in One Session</h1>
-            <p className="hero-subtitle">22 September, 7:00 PM IST • Live Online • ₹99</p>
+            <p className="hero-subtitle">21 September, 1:00 PM IST • Live Online • ₹99</p>
             <p className="hero-subtitle">How vibe coding, AI-native tools, and creative flow will change how software is built—fast, collaborative, and joyful.</p>
             <div className="hero-buttons">
               <Link className="btn btn-primary" to="/webinar/register">Register for ₹99</Link>
@@ -66,17 +66,88 @@ const WebinarLanding = () => {
 
         <div id="agenda" className="agenda">
           <h2 className="section-title">Agenda: Build a Real MVP, Live</h2>
-          <ul className="module-content">
-            <li>Vision: Why Vibe Coding is the next paradigm of software creation</li>
-            <li>Playbook: Rhythm, prompts, and decision frameworks for speed</li>
-            <li>Platforms Deep-Dive: Cursor, Lovable, and Emergent.sh</li>
-            <li>Live Build: Plan → scaffold → code → integrate → deploy</li>
-            <li>Launch Checklist: Handoff, metrics, iteration loop</li>
-            <li>Q&A + Community Onboarding</li>
-          </ul>
-          <p style={{ textAlign: 'center', marginTop: '1rem', color: '#666' }}>
-            Deliverable: A working MVP by session end (repo + live URL where possible).
-          </p>
+          <div className="agenda-grid">
+            <div className="agenda-item">
+              <div className="agenda-icon">
+                <i className="fas fa-eye"></i>
+              </div>
+              <div className="agenda-content">
+                <h3>Vision</h3>
+                <p>Why Vibe Coding is the next paradigm of software creation</p>
+              </div>
+            </div>
+            
+            <div className="agenda-item">
+              <div className="agenda-icon">
+                <i className="fas fa-book"></i>
+              </div>
+              <div className="agenda-content">
+                <h3>Playbook</h3>
+                <p>Rhythm, prompts, and decision frameworks for speed</p>
+              </div>
+            </div>
+            
+            <div className="agenda-item">
+              <div className="agenda-icon">
+                <i className="fas fa-tools"></i>
+              </div>
+              <div className="agenda-content">
+                <h3>Platforms Deep-Dive</h3>
+                <p>Cursor, Lovable, and Emergent.sh</p>
+              </div>
+            </div>
+            
+            <div className="agenda-item featured">
+              <div className="agenda-icon">
+                <i className="fas fa-code"></i>
+              </div>
+              <div className="agenda-content">
+                <h3>Live Build</h3>
+                <p>Plan → scaffold → code → integrate → deploy</p>
+                <div className="build-flow">
+                  <span className="flow-step">Plan</span>
+                  <i className="fas fa-arrow-right"></i>
+                  <span className="flow-step">Scaffold</span>
+                  <i className="fas fa-arrow-right"></i>
+                  <span className="flow-step">Code</span>
+                  <i className="fas fa-arrow-right"></i>
+                  <span className="flow-step">Integrate</span>
+                  <i className="fas fa-arrow-right"></i>
+                  <span className="flow-step">Deploy</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="agenda-item">
+              <div className="agenda-icon">
+                <i className="fas fa-check-circle"></i>
+              </div>
+              <div className="agenda-content">
+                <h3>Launch Checklist</h3>
+                <p>Handoff, metrics, iteration loop</p>
+              </div>
+            </div>
+            
+            <div className="agenda-item">
+              <div className="agenda-icon">
+                <i className="fas fa-users"></i>
+              </div>
+              <div className="agenda-content">
+                <h3>Q&A + Community</h3>
+                <p>Onboarding and networking</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="deliverable-card">
+            <div className="deliverable-icon">
+              <i className="fas fa-rocket"></i>
+            </div>
+            <div className="deliverable-content">
+              <h3>Deliverable</h3>
+              <p>A working MVP by session end (repo + live URL where possible)</p>
+            </div>
+          </div>
         </div>
 
         <div className="speaker">

@@ -10,7 +10,7 @@ const WebinarSuccess = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const addToCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Vibe%20Coding%20Webinar&dates=20240922T133000Z/20240922T150000Z&details=Join%20the%20webinar%20-%20we%27ll%20email%20you%20the%20link%20before%20the%20event.&location=Online`;
+  const addToCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Vibe%20Coding%20Webinar&dates=20240921T073000Z/20240921T090000Z&details=Join%20the%20webinar%20-%20we%27ll%20email%20you%20the%20link%20before%20the%20event.&location=Online`;
 
   return (
     <section className="webinar-success">
@@ -25,7 +25,7 @@ const WebinarSuccess = () => {
           WebkitTextFillColor: 'transparent',
           animation: 'gradientShift 3s ease-in-out infinite'
         }}>Registration Successful! 🎉</h1>
-        <p className="success-message">Your details have been saved to our database and registration is confirmed for the Vibe Coding Webinar on 22 September, 7:00 PM IST.</p>
+        <p className="success-message">Your details have been saved to our database and registration is confirmed for the Vibe Coding Webinar on 21 September, 1:00 PM IST.</p>
         {ref && <p className="reference-info">Reference ID: {ref}</p>}
 
         <div className="next-steps">
