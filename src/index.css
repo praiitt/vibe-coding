@@ -1920,6 +1920,19 @@ section {
     color: #555;
 }
 
+.webinar-landing .hero .hero-description {
+    color: #333 !important;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    max-width: 600px;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    font-weight: 400;
+    text-shadow: none;
+}
+
 .webinar-landing .hero .hero-buttons .btn {
     opacity: 1 !important;
     visibility: visible !important;
@@ -2004,6 +2017,9 @@ section {
     margin-bottom: 1.5rem;
     color: rgba(255, 255, 255, 0.9);
     max-width: 600px;
+    opacity: 1;
+    visibility: visible;
+    display: block;
 }
 
 /* Hero Stats */
