@@ -268,7 +268,7 @@ app.get('/linkedin-callback', async (req, res) => {
 
     // Redirect to frontend with success and token
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-    const redirectUrl = `${frontendUrl}/linkedin-success?token=${token}&user=${encodeURIComponent(JSON.stringify({
+    const redirectUrl = `${frontendUrl}/?linkedin_success=true&token=${token}&user=${encodeURIComponent(JSON.stringify({
       id: user._id,
       name: user.name,
       email: user.email,

@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { analyticsService } from '../services/analytics';
 import { apiService } from '../services/api';
 
 const Hero = ({ showNotification }) => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { loginWithLinkedIn } = useAuth();
   const [inViewRef, inView] = useInView({
     threshold: 0.5,
     triggerOnce: true
@@ -19,6 +24,41 @@ const Hero = ({ showNotification }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   // const [joinCaptchaVerified, setJoinCaptchaVerified] = useState(false);
+
+  // Handle LinkedIn OAuth success
+  useEffect(() => {
+    const handleLinkedInSuccess = async () => {
+      const linkedinSuccess = searchParams.get('linkedin_success');
+      const token = searchParams.get('token');
+      const userParam = searchParams.get('user');
+      const error = searchParams.get('error');
+      const message = searchParams.get('message');
+
+      if (linkedinSuccess && token && userParam) {
+        try {
+          // Parse user data
+          const userData = JSON.parse(decodeURIComponent(userParam));
+
+          // Store token and user data
+          localStorage.setItem('authToken', token);
+          
+          // Update auth context
+          await loginWithLinkedIn(token);
+          
+          showNotification('🎉 Successfully signed in with LinkedIn!', 'success');
+          navigate('/dashboard');
+          
+        } catch (err) {
+          console.error('LinkedIn success error:', err);
+          showNotification(`❌ LinkedIn authentication failed: ${err.message}`, 'error');
+        }
+      } else if (error) {
+        showNotification(`❌ LinkedIn authentication failed: ${message || error}`, 'error');
+      }
+    };
+
+    handleLinkedInSuccess();
+  }, [searchParams, navigate, loginWithLinkedIn, showNotification]);
 
   useEffect(() => {
     if (inView && statsRef.current) {
