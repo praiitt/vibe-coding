@@ -7,17 +7,48 @@ const WebinarLanding = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const scrollToAgenda = () => {
+    const agendaElement = document.getElementById('agenda');
+    if (agendaElement) {
+      agendaElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="webinar-landing">
       <div className="container">
         <div className="hero">
           <div className="hero-content">
+            <div className="hero-badge">
+              <i className="fas fa-fire"></i>
+              <span>Live Session</span>
+            </div>
             <h1 className="hero-title">Vibe Coding: Build an MVP Live in One Session</h1>
             <p className="hero-subtitle">21 September, 1:00 PM IST • Live Online • ₹99</p>
-            <p className="hero-subtitle">How vibe coding, AI-native tools, and creative flow will change how software is built—fast, collaborative, and joyful.</p>
+            <p className="hero-description">How vibe coding, AI-native tools, and creative flow will change how software is built—fast, collaborative, and joyful.</p>
             <div className="hero-buttons">
-              <Link className="btn btn-primary" to="/webinar/register">Register for ₹99</Link>
-              <a className="btn btn-secondary" href="#agenda">See Agenda</a>
+              <Link className="btn btn-primary" to="/webinar/register">
+                <i className="fas fa-rocket"></i>
+                Register for ₹99
+              </Link>
+              <button className="btn btn-secondary" onClick={scrollToAgenda}>
+                <i className="fas fa-list"></i>
+                See Agenda
+              </button>
+            </div>
+            <div className="hero-stats">
+              <div className="stat">
+                <span className="stat-number">2 Hours</span>
+                <span className="stat-label">Live Session</span>
+              </div>
+              <div className="stat">
+                <span className="stat-number">1 MVP</span>
+                <span className="stat-label">Built Live</span>
+              </div>
+              <div className="stat">
+                <span className="stat-number">Recording</span>
+                <span className="stat-label">Included</span>
+              </div>
             </div>
           </div>
         </div>
@@ -65,76 +96,143 @@ const WebinarLanding = () => {
         </div>
 
         <div id="agenda" className="agenda">
-          <h2 className="section-title">Agenda: Build a Real MVP, Live</h2>
-          <div className="agenda-grid">
-            <div className="agenda-item">
-              <div className="agenda-icon">
-                <i className="fas fa-eye"></i>
-              </div>
-              <div className="agenda-content">
-                <h3>Vision</h3>
-                <p>Why Vibe Coding is the next paradigm of software creation</p>
-              </div>
-            </div>
-            
-            <div className="agenda-item">
-              <div className="agenda-icon">
-                <i className="fas fa-book"></i>
-              </div>
-              <div className="agenda-content">
-                <h3>Playbook</h3>
-                <p>Rhythm, prompts, and decision frameworks for speed</p>
-              </div>
-            </div>
-            
-            <div className="agenda-item">
-              <div className="agenda-icon">
-                <i className="fas fa-tools"></i>
-              </div>
-              <div className="agenda-content">
-                <h3>Platforms Deep-Dive</h3>
-                <p>Cursor, Lovable, and Emergent.sh</p>
-              </div>
-            </div>
-            
-            <div className="agenda-item featured">
-              <div className="agenda-icon">
-                <i className="fas fa-code"></i>
-              </div>
-              <div className="agenda-content">
-                <h3>Live Build</h3>
-                <p>Plan → scaffold → code → integrate → deploy</p>
-                <div className="build-flow">
-                  <span className="flow-step">Plan</span>
-                  <i className="fas fa-arrow-right"></i>
-                  <span className="flow-step">Scaffold</span>
-                  <i className="fas fa-arrow-right"></i>
-                  <span className="flow-step">Code</span>
-                  <i className="fas fa-arrow-right"></i>
-                  <span className="flow-step">Integrate</span>
-                  <i className="fas fa-arrow-right"></i>
-                  <span className="flow-step">Deploy</span>
+          <div className="agenda-header">
+            <h2 className="section-title">Agenda: Build a Real MVP, Live</h2>
+            <p className="section-subtitle">2 hours of hands-on building with AI-native tools</p>
+          </div>
+          
+          <div className="agenda-timeline">
+            <div className="timeline-item">
+              <div className="timeline-time">0:00 - 0:15</div>
+              <div className="timeline-content">
+                <div className="agenda-icon">
+                  <i className="fas fa-eye"></i>
+                </div>
+                <div className="agenda-details">
+                  <h3>Vision & Introduction</h3>
+                  <p>Why Vibe Coding is the next paradigm of software creation</p>
+                  <ul>
+                    <li>Understanding the vibe coding philosophy</li>
+                    <li>AI-native development principles</li>
+                    <li>Speed vs quality trade-offs</li>
+                  </ul>
                 </div>
               </div>
             </div>
-            
-            <div className="agenda-item">
-              <div className="agenda-icon">
-                <i className="fas fa-check-circle"></i>
-              </div>
-              <div className="agenda-content">
-                <h3>Launch Checklist</h3>
-                <p>Handoff, metrics, iteration loop</p>
+
+            <div className="timeline-item">
+              <div className="timeline-time">0:15 - 0:30</div>
+              <div className="timeline-content">
+                <div className="agenda-icon">
+                  <i className="fas fa-book"></i>
+                </div>
+                <div className="agenda-details">
+                  <h3>Playbook & Frameworks</h3>
+                  <p>Rhythm, prompts, and decision frameworks for speed</p>
+                  <ul>
+                    <li>Prompt engineering for AI tools</li>
+                    <li>Decision-making frameworks</li>
+                    <li>Iteration loops and feedback cycles</li>
+                  </ul>
+                </div>
               </div>
             </div>
-            
-            <div className="agenda-item">
-              <div className="agenda-icon">
-                <i className="fas fa-users"></i>
+
+            <div className="timeline-item">
+              <div className="timeline-time">0:30 - 0:45</div>
+              <div className="timeline-content">
+                <div className="agenda-icon">
+                  <i className="fas fa-tools"></i>
+                </div>
+                <div className="agenda-details">
+                  <h3>Platforms Deep-Dive</h3>
+                  <p>Cursor, Lovable, and Emergent.sh walkthrough</p>
+                  <ul>
+                    <li>Cursor: AI-first IDE setup and workflows</li>
+                    <li>Lovable: Full-stack app generation</li>
+                    <li>Emergent.sh: Agentic development loops</li>
+                  </ul>
+                </div>
               </div>
-              <div className="agenda-content">
-                <h3>Q&A + Community</h3>
-                <p>Onboarding and networking</p>
+            </div>
+
+            <div className="timeline-item featured">
+              <div className="timeline-time">0:45 - 1:30</div>
+              <div className="timeline-content">
+                <div className="agenda-icon">
+                  <i className="fas fa-code"></i>
+                </div>
+                <div className="agenda-details">
+                  <h3>Live Build Session</h3>
+                  <p>Plan → scaffold → code → integrate → deploy</p>
+                  <div className="build-flow">
+                    <div className="flow-step">
+                      <i className="fas fa-lightbulb"></i>
+                      <span>Plan</span>
+                    </div>
+                    <i className="fas fa-arrow-right"></i>
+                    <div className="flow-step">
+                      <i className="fas fa-layer-group"></i>
+                      <span>Scaffold</span>
+                    </div>
+                    <i className="fas fa-arrow-right"></i>
+                    <div className="flow-step">
+                      <i className="fas fa-code"></i>
+                      <span>Code</span>
+                    </div>
+                    <i className="fas fa-arrow-right"></i>
+                    <div className="flow-step">
+                      <i className="fas fa-link"></i>
+                      <span>Integrate</span>
+                    </div>
+                    <i className="fas fa-arrow-right"></i>
+                    <div className="flow-step">
+                      <i className="fas fa-rocket"></i>
+                      <span>Deploy</span>
+                    </div>
+                  </div>
+                  <div className="build-highlights">
+                    <span className="highlight">🎯 Real MVP</span>
+                    <span className="highlight">⚡ Live Coding</span>
+                    <span className="highlight">🤖 AI-Powered</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="timeline-item">
+              <div className="timeline-time">1:30 - 1:45</div>
+              <div className="timeline-content">
+                <div className="agenda-icon">
+                  <i className="fas fa-check-circle"></i>
+                </div>
+                <div className="agenda-details">
+                  <h3>Launch & Next Steps</h3>
+                  <p>Handoff, metrics, and iteration planning</p>
+                  <ul>
+                    <li>Deployment and monitoring setup</li>
+                    <li>Key metrics to track</li>
+                    <li>Iteration and improvement loops</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="timeline-item">
+              <div className="timeline-time">1:45 - 2:00</div>
+              <div className="timeline-content">
+                <div className="agenda-icon">
+                  <i className="fas fa-users"></i>
+                </div>
+                <div className="agenda-details">
+                  <h3>Q&A + Community</h3>
+                  <p>Onboarding and networking</p>
+                  <ul>
+                    <li>Answer your burning questions</li>
+                    <li>Community access and resources</li>
+                    <li>Next steps for your projects</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -144,8 +242,29 @@ const WebinarLanding = () => {
               <i className="fas fa-rocket"></i>
             </div>
             <div className="deliverable-content">
-              <h3>Deliverable</h3>
-              <p>A working MVP by session end (repo + live URL where possible)</p>
+              <h3>What You'll Get</h3>
+              <div className="deliverable-list">
+                <div className="deliverable-item">
+                  <i className="fas fa-check"></i>
+                  <span>A working MVP by session end</span>
+                </div>
+                <div className="deliverable-item">
+                  <i className="fas fa-check"></i>
+                  <span>Complete source code repository</span>
+                </div>
+                <div className="deliverable-item">
+                  <i className="fas fa-check"></i>
+                  <span>Live URL (where possible)</span>
+                </div>
+                <div className="deliverable-item">
+                  <i className="fas fa-check"></i>
+                  <span>Session recording for review</span>
+                </div>
+                <div className="deliverable-item">
+                  <i className="fas fa-check"></i>
+                  <span>Community access and support</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
