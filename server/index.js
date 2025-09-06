@@ -25,12 +25,24 @@ app.use(express.json());
 
 // Initialize Razorpay
 let razorpay = null;
-if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
-  razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
-  });
-  console.log('✅ Razorpay initialized successfully');
+const sanitizeEnv = (val) => typeof val === 'string' ? val.trim().replace(/^"|"$/g, '') : val;
+const rawRzpId = process.env.RAZORPAY_KEY_ID;
+const rawRzpSecret = process.env.RAZORPAY_KEY_SECRET;
+const rzpId = sanitizeEnv(rawRzpId);
+const rzpSecret = sanitizeEnv(rawRzpSecret);
+if (rzpId && rzpSecret) {
+  if (rawRzpId !== rzpId || rawRzpSecret !== rzpSecret) {
+    console.warn('Razorpay env values had surrounding whitespace/quotes. Sanitized for initialization.');
+  }
+  if ([" ", "\n", "\r", "\t", "%"].some(ch => String(rzpId).includes(ch) || String(rzpSecret).includes(ch))) {
+    console.error('❌ Razorpay credentials contain invalid characters (whitespace or %). Not initializing Razorpay.');
+  } else {
+    razorpay = new Razorpay({
+      key_id: rzpId,
+      key_secret: rzpSecret,
+    });
+    console.log('✅ Razorpay initialized successfully');
+  }
 } else {
   console.log('⚠️  Razorpay not initialized - missing credentials');
 }
@@ -563,10 +575,11 @@ app.post('/api/webinar/register', [
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ errors: errors.array(), error: 'Validation failed' });
     }
 
     if (!razorpay) {
+      console.error('Webinar registration error: Razorpay not initialized');
       return res.status(500).json({ error: 'Payment service not available' });
     }
 
@@ -589,8 +602,14 @@ app.post('/api/webinar/register', [
     const order = await razorpay.orders.create(options);
     res.json({ orderId: order.id, amount: amount });
   } catch (error) {
-    console.error('Webinar registration error:', error);
-    res.status(500).json({ error: 'Error creating webinar order' });
+    console.error('Webinar registration error:', {
+      message: error?.message,
+      stack: error?.stack,
+      response: error?.response?.data || null,
+    });
+    // Normalize Razorpay errors if present
+    const errMsg = error?.error?.description || error?.message || 'Error creating webinar order';
+    res.status(500).json({ error: errMsg });
   }
 });
 
@@ -599,6 +618,7 @@ app.post('/api/webinar/verify', async (req, res) => {
     const { orderId, paymentId, signature, name, email, phone, experience, goals } = req.body;
 
     if (!razorpay) {
+      console.error('Webinar verification error: Razorpay not initialized');
       return res.status(500).json({ error: 'Payment service not available' });
     }
 
@@ -630,8 +650,13 @@ app.post('/api/webinar/verify', async (req, res) => {
 
     res.json({ message: 'Webinar registration successful' });
   } catch (error) {
-    console.error('Webinar verification error:', error);
-    res.status(500).json({ error: 'Error verifying webinar payment' });
+    console.error('Webinar verification error:', {
+      message: error?.message,
+      stack: error?.stack,
+      response: error?.response?.data || null,
+    });
+    const errMsg = error?.error?.description || error?.message || 'Error verifying webinar payment';
+    res.status(500).json({ error: errMsg });
   }
 });
 
