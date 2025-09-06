@@ -1,0 +1,61 @@
+# Firebase App Hosting configuration for prod
+# Follows documented schema: env as a list, with value/secret and availability
+# Ref: https://firebase.google.com/docs/app-hosting/configure
+
+runConfig:
+  cpu: 1
+  memoryMiB: 1024
+  minInstances: 1
+  maxInstances: 10
+
+scripts:
+  # No build step for pure Node/Express backend
+  runCommand: node index.js
+
+healthCheck:
+  path: /health
+  timeout: 30
+
+env:
+  # Razorpay
+  - variable: RAZORPAY_KEY_ID
+    value: rzp_live_RBwW40KxX2ChHW
+    availability:
+      - RUNTIME
+  - variable: RAZORPAY_KEY_SECRET
+    secret: RAZORPAY_KEY_SECRET
+    availability:
+      - RUNTIME
+
+  # JWT
+  - variable: JWT_SECRET
+    secret: JWT_SECRET
+    availability:
+      - RUNTIME
+
+  # MongoDB
+  - variable: MONGODB_URI
+    secret: MONGODB_URI
+    availability:
+      - RUNTIME
+
+  # LinkedIn OAuth
+  - variable: LINKEDIN_CLIENT_ID
+    value: 7701p5x0n48k0m
+    availability:
+      - RUNTIME
+  - variable: LINKEDIN_CLIENT_SECRET
+    secret: LINKEDIN_CLIENT_SECRET
+    availability:
+      - RUNTIME
+  - variable: LINKEDIN_REDIRECT_URI
+    value: https://vibe-coding--library-management-806d9.asia-east1.hosted.app/linkedin-callback
+    availability:
+      - RUNTIME
+
+  # Frontend URL
+  - variable: FRONTEND_URL
+    value: https://vibe-coding.lifestyle
+    availability:
+      - RUNTIME
+
