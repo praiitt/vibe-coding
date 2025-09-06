@@ -710,6 +710,46 @@ app.get('/api/razorpay-key', (req, res) => {
   res.json({ key: process.env.RAZORPAY_KEY_ID || '' });
 });
 
+// Razorpay diagnostic - validate credentials/connectivity without exposing secrets
+app.get('/api/razorpay-status', async (req, res) => {
+  try {
+    if (!razorpay) {
+      return res.status(200).json({
+        ok: false,
+        initialized: false,
+        canListOrders: false,
+        message: 'Razorpay not initialized',
+      });
+    }
+
+    // Attempt a minimal list orders call; if credentials are invalid, this will error
+    const result = await razorpay.orders.all({ count: 1 });
+    const first = Array.isArray(result?.items) && result.items.length > 0 ? result.items[0] : null;
+    return res.json({
+      ok: true,
+      initialized: true,
+      canListOrders: true,
+      sampleOrder: first ? {
+        id: first.id,
+        amount: first.amount,
+        currency: first.currency,
+        status: first.status,
+        created_at: first.created_at,
+      } : null,
+    });
+  } catch (error) {
+    const statusCode = error?.statusCode || error?.status || 200; // respond 200 to avoid noisy monitors
+    const description = error?.error?.description || error?.message || 'Unknown error';
+    return res.status(200).json({
+      ok: false,
+      initialized: !!razorpay,
+      canListOrders: false,
+      error: description,
+      statusCode,
+    });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
