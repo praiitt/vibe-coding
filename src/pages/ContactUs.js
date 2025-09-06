@@ -99,7 +99,7 @@ const ContactUs = () => {
                 </div>
                 <div className="contact-text">
                   <h3>Email</h3>
-                  <p>hello@vibe-coding.lifestyle</p>
+                  <a href="mailto:hello@vibe-coding.lifestyle">hello@vibe-coding.lifestyle</a>
                 </div>
               </div>
 
@@ -109,7 +109,7 @@ const ContactUs = () => {
                 </div>
                 <div className="contact-text">
                   <h3>Phone</h3>
-                  <p>+919867840628</p>
+                  <a href="tel:+919867840628">+91 98678 40628</a>
                 </div>
               </div>
 

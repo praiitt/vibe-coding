@@ -3102,13 +3102,9 @@ section {
         margin: 0 auto;
     }
     .contact-header {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 18px;
-        padding: 1.25rem 1rem;
-        margin: 0.75rem 0;
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
-        backdrop-filter: blur(20px);
-        text-align: center;
+        background: transparent;
+        padding: 0.5rem 0.25rem;
+        margin: 0.25rem 0 0.75rem;
     }
     .contact-header h1 {
         font-size: 1.6rem;
@@ -3117,16 +3113,16 @@ section {
         font-size: 0.95rem;
     }
     .contact-content {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr;
         gap: 1rem;
         max-width: 680px;
         margin: 0 auto;
     }
     .contact-info {
         border-radius: 16px;
-        padding: 1.25rem 1rem;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        padding: 1rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.06);
     }
     .contact-details {
         gap: 1rem;
@@ -3144,8 +3140,8 @@ section {
     }
     .contact-form-container {
         border-radius: 16px;
-        padding: 1.25rem 1rem;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        padding: 1rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.06);
     }
     .form-row {
         gap: 0.75rem;
@@ -5312,3 +5308,82 @@ select option:checked, .form-select option:checked {
 .social-link .fa-linkedin { color: #0a66c2; }
 .social-link .fa-facebook { color: #1877f2; }
 /* ... existing code ... */
+
+@media (max-width: 768px) {
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.9rem;
+    }
+    .hero-buttons .btn {
+        width: 100%;
+    }
+    .hero .hero-container {
+        padding: 0 16px;
+        box-sizing: border-box;
+    }
+    .hero-visual .code-animation {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    .hero-stats {
+        justify-content: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+    .hero-stats .stat {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 0.6rem 0.9rem;
+        border-radius: 12px;
+        min-width: auto;
+    }
+    .hero-stats .stat-number {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 0.1rem;
+    }
+    .hero-stats .stat-label {
+        font-size: 0.8rem;
+        color: #555;
+    }
+}
+
+@media (max-width: 400px) {
+    .hero-visual {
+        display: none;
+    }
+}
+
+/* Contact page social links (scoped so footer unaffected) */
+.contact-info .social-links {
+    margin-top: 0.75rem;
+}
+
+.contact-info .social-links h3 {
+    margin: 0 0 0.5rem 0;
+}
+
+.contact-info .social-icons {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.contact-info .social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s ease;
+}
+
+.contact-info .social-link:hover {
+    background: #eef2ff;
+    border-color: #c7d2fe;
+    color: #4f46e5;
+}
