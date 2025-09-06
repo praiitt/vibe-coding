@@ -116,17 +116,17 @@ const WebinarLanding = () => {
                       </div>
                     </div>
             <div className="hero-stats">
-              <div className="stat">
-                <span className="stat-number">2 Hours</span>
-                <span className="stat-label">Live Session</span>
+              <div className="stat-item">
+                <i className="fas fa-clock"></i>
+                <span>2 Hours Live</span>
               </div>
-              <div className="stat">
-                <span className="stat-number">1 MVP</span>
-                <span className="stat-label">Built Live</span>
+              <div className="stat-item">
+                <i className="fas fa-code"></i>
+                <span>1 MVP Built</span>
               </div>
-              <div className="stat">
-                <span className="stat-number">Recording</span>
-                <span className="stat-label">Included</span>
+              <div className="stat-item">
+                <i className="fas fa-video"></i>
+                <span>Recording Included</span>
               </div>
             </div>
           </div>
@@ -312,33 +312,31 @@ const WebinarLanding = () => {
             </div>
           </div>
           
-          <div className="deliverable-card">
-            <div className="deliverable-icon">
+          <div className="deliverables-section">
+            <h3 className="deliverables-title">
               <i className="fas fa-rocket"></i>
-            </div>
-            <div className="deliverable-content">
-              <h3>What You'll Get</h3>
-              <div className="deliverable-list">
-                <div className="deliverable-item">
-                  <i className="fas fa-check"></i>
-                  <span>A working MVP by session end</span>
-                </div>
-                <div className="deliverable-item">
-                  <i className="fas fa-check"></i>
-                  <span>Complete source code repository</span>
-                </div>
-                <div className="deliverable-item">
-                  <i className="fas fa-check"></i>
-                  <span>Live URL (where possible)</span>
-                </div>
-                <div className="deliverable-item">
-                  <i className="fas fa-check"></i>
-                  <span>Session recording for review</span>
-                </div>
-                <div className="deliverable-item">
-                  <i className="fas fa-check"></i>
-                  <span>Community access and support</span>
-                </div>
+              What You'll Get
+            </h3>
+            <div className="deliverables-grid">
+              <div className="deliverable-item">
+                <i className="fas fa-check"></i>
+                <span>A working MVP by session end</span>
+              </div>
+              <div className="deliverable-item">
+                <i className="fas fa-check"></i>
+                <span>Complete source code repository</span>
+              </div>
+              <div className="deliverable-item">
+                <i className="fas fa-check"></i>
+                <span>Live URL (where possible)</span>
+              </div>
+              <div className="deliverable-item">
+                <i className="fas fa-check"></i>
+                <span>Session recording for review</span>
+              </div>
+              <div className="deliverable-item">
+                <i className="fas fa-check"></i>
+                <span>Community access and support</span>
               </div>
             </div>
           </div>

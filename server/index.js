@@ -23,28 +23,19 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Initialize Razorpay
+// Initialize Razorpay with hardcoded credentials
 let razorpay = null;
-const sanitizeEnv = (val) => typeof val === 'string' ? val.trim().replace(/^"|"$/g, '') : val;
-const rawRzpId = process.env.RAZORPAY_KEY_ID;
-const rawRzpSecret = process.env.RAZORPAY_KEY_SECRET;
-const rzpId = sanitizeEnv(rawRzpId);
-const rzpSecret = sanitizeEnv(rawRzpSecret);
-if (rzpId && rzpSecret) {
-  if (rawRzpId !== rzpId || rawRzpSecret !== rzpSecret) {
-    console.warn('Razorpay env values had surrounding whitespace/quotes. Sanitized for initialization.');
-  }
-  if ([" ", "\n", "\r", "\t", "%"].some(ch => String(rzpId).includes(ch) || String(rzpSecret).includes(ch))) {
-    console.error('❌ Razorpay credentials contain invalid characters (whitespace or %). Not initializing Razorpay.');
-  } else {
-    razorpay = new Razorpay({
-      key_id: rzpId,
-      key_secret: rzpSecret,
-    });
-    console.log('✅ Razorpay initialized successfully');
-  }
+const RAZORPAY_KEY_ID = 'rzp_live_RBwW40KxX2ChHW';
+const RAZORPAY_KEY_SECRET = 'your_razorpay_live_secret_key_here'; // Replace with actual secret
+
+if (RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET && RAZORPAY_KEY_SECRET !== 'your_razorpay_live_secret_key_here') {
+  razorpay = new Razorpay({
+    key_id: RAZORPAY_KEY_ID,
+    key_secret: RAZORPAY_KEY_SECRET,
+  });
+  console.log('✅ Razorpay initialized successfully with hardcoded credentials');
 } else {
-  console.log('⚠️  Razorpay not initialized - missing credentials');
+  console.log('⚠️  Razorpay not initialized - please update the hardcoded secret key');
 }
 
 // Connect to MongoDB
@@ -707,7 +698,7 @@ app.get('/api/courses/my-courses', auth, async (req, res) => {
 
 // Get Razorpay key
 app.get('/api/razorpay-key', (req, res) => {
-  res.json({ key: process.env.RAZORPAY_KEY_ID || '' });
+  res.json({ key: RAZORPAY_KEY_ID });
 });
 
 // Razorpay diagnostic - validate credentials/connectivity without exposing secrets

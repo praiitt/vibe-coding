@@ -20,7 +20,6 @@ const Footer = () => {
           <div className="footer-section">
             <div className="footer-logo">
               <img src="/vibe-coding-logo _cropped.png" alt="Vibe Coding" className="footer-logo-img" />
-              <span>vibe-coding.lifestyle</span>
             </div>
             <p>Transforming coding from a job into a lifestyle. Join the global movement of creative developers.</p>
             <p className="company-info">A product of <strong>Absolute Dimension Pvt Ltd</strong></p>
@@ -38,24 +37,6 @@ const Footer = () => {
                 <i className="fab fa-linkedin"></i>
               </a>
             </div>
-          </div>
-          <div className="footer-section">
-            <h4>Lifestyle</h4>
-            <ul>
-              <li><a href="#home" onClick={() => scrollToSection('home')}>Home</a></li>
-              <li><a href="#features" onClick={() => scrollToSection('features')}>Features</a></li>
-              <li><a href="#curriculum" onClick={() => scrollToSection('curriculum')}>Journey</a></li>
-              <li><a href="#pricing" onClick={() => scrollToSection('pricing')}>Tiers</a></li>
-            </ul>
-          </div>
-          <div className="footer-section">
-            <h4>Community</h4>
-            <ul>
-              <li><a href="#">Vibe Blog</a></li>
-              <li><a href="#">Lifestyle Tips</a></li>
-              <li><a href="#">Success Stories</a></li>
-              <li><a href="#">Global Events</a></li>
-            </ul>
           </div>
           <div className="footer-section">
             <h4>Support</h4>
