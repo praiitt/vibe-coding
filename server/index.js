@@ -25,8 +25,10 @@ app.use(express.json());
 
 // Initialize Razorpay with hardcoded credentials
 let razorpay = null;
+// RAZORPAY_KEY_ID=rzp_live_RBwW40KxX2ChHW
+// RAZORPAY_KEY_SECRET=59jWEo3NGn6k53NOFRj3xxt3
 const RAZORPAY_KEY_ID = 'rzp_live_RBwW40KxX2ChHW';
-const RAZORPAY_KEY_SECRET = 'your_razorpay_live_secret_key_here'; // Replace with actual secret
+const RAZORPAY_KEY_SECRET = '59jWEo3NGn6k53NOFRj3xxt3'; // Replace with actual secret
 
 if (RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET && RAZORPAY_KEY_SECRET !== 'your_razorpay_live_secret_key_here') {
   razorpay = new Razorpay({
