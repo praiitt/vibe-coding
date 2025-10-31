@@ -12,6 +12,9 @@ const User = require('./models/User');
 const Contact = require('./models/Contact');
 const WebinarRegistration = require('./models/WebinarRegistration');
 const Analytics = require('./models/Analytics');
+const Course = require('./models/Course');
+const Enrollment = require('./models/Enrollment');
+const Progress = require('./models/Progress');
 
 // Import middleware
 const auth = require('./middleware/auth');
@@ -19,9 +22,49 @@ const auth = require('./middleware/auth');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// Middleware - CORS configuration
+const allowedOrigins = [
+  'https://vibe-coding.lifestyle',
+  process.env.FRONTEND_URL,
+  'http://localhost:3000',
+  'http://localhost:3001',
+].filter(Boolean); // Remove undefined values
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      // Log for debugging but allow for now to avoid breaking production
+      console.log('CORS request from origin:', origin);
+      callback(null, true);
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['Content-Type', 'Authorization'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
+
+// Simple admin helper based on allowed emails list (comma-separated)
+const isAdmin = (user) => {
+  try {
+    const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+    if (!Array.isArray(adminEmails) || adminEmails.length === 0) return false;
+    return adminEmails.includes((user?.email || '').toLowerCase());
+  } catch (e) {
+    return false;
+  }
+};
 
 // Initialize Razorpay with hardcoded credentials
 let razorpay = null;
@@ -61,6 +104,100 @@ app.get('/health', (req, res) => {
     razorpay: razorpay ? 'Configured' : 'Not configured',
     mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
   });
+});
+
+// ===== LMS: Courses CRUD =====
+// List courses (public: only published)
+app.get('/api/courses', async (req, res) => {
+  try {
+    const onlyPublished = req.query.includeUnpublished !== 'true';
+    const filter = onlyPublished ? { isPublished: true } : {};
+    const courses = await Course.find(filter).select('-modules.contentBlocks.data');
+    res.json({ courses });
+  } catch (error) {
+    console.error('List courses error:', error);
+    res.status(500).json({ error: 'Error fetching courses' });
+  }
+});
+
+// Get single course by slug (include modules/lessons)
+app.get('/api/courses/:slug', async (req, res) => {
+  try {
+    const course = await Course.findOne({ slug: req.params.slug });
+    if (!course) return res.status(404).json({ error: 'Course not found' });
+    if (!course.isPublished) {
+      // allow admins to preview
+      const authHeader = req.header('Authorization');
+      if (!authHeader) return res.status(403).json({ error: 'Course not published' });
+      try {
+        const token = authHeader.replace('Bearer ', '');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
+        const user = await User.findById(decoded.userId);
+        if (!user || !isAdmin(user)) return res.status(403).json({ error: 'Course not published' });
+      } catch (e) {
+        return res.status(403).json({ error: 'Course not published' });
+      }
+    }
+    res.json({ course });
+  } catch (error) {
+    console.error('Get course error:', error);
+    res.status(500).json({ error: 'Error fetching course' });
+  }
+});
+
+// Create course (admin only)
+app.post('/api/courses', auth, async (req, res) => {
+  try {
+    if (!isAdmin(req.user)) return res.status(403).json({ error: 'Forbidden' });
+    const payload = req.body || {};
+    const course = new Course({
+      title: payload.title,
+      slug: payload.slug,
+      description: payload.description || '',
+      level: payload.level || 'beginner',
+      language: payload.language || 'en',
+      thumbnailUrl: payload.thumbnailUrl,
+      promoVideoUrl: payload.promoVideoUrl,
+      priceInPaise: payload.priceInPaise || 0,
+      isPublished: !!payload.isPublished,
+      modules: Array.isArray(payload.modules) ? payload.modules : [],
+      tags: Array.isArray(payload.tags) ? payload.tags : [],
+      createdBy: req.user._id
+    });
+    await course.save();
+    res.status(201).json({ course });
+  } catch (error) {
+    console.error('Create course error:', error);
+    res.status(500).json({ error: error.message || 'Error creating course' });
+  }
+});
+
+// Update course (admin only)
+app.put('/api/courses/:id', auth, async (req, res) => {
+  try {
+    if (!isAdmin(req.user)) return res.status(403).json({ error: 'Forbidden' });
+    const updates = req.body || {};
+    updates.updatedAt = new Date();
+    const course = await Course.findByIdAndUpdate(req.params.id, updates, { new: true });
+    if (!course) return res.status(404).json({ error: 'Course not found' });
+    res.json({ course });
+  } catch (error) {
+    console.error('Update course error:', error);
+    res.status(500).json({ error: 'Error updating course' });
+  }
+});
+
+// Delete course (admin only)
+app.delete('/api/courses/:id', auth, async (req, res) => {
+  try {
+    if (!isAdmin(req.user)) return res.status(403).json({ error: 'Forbidden' });
+    const course = await Course.findByIdAndDelete(req.params.id);
+    if (!course) return res.status(404).json({ error: 'Course not found' });
+    res.json({ message: 'Course deleted' });
+  } catch (error) {
+    console.error('Delete course error:', error);
+    res.status(500).json({ error: 'Error deleting course' });
+  }
 });
 
 // Authentication routes
@@ -695,6 +832,142 @@ app.get('/api/courses/my-courses', auth, async (req, res) => {
   } catch (error) {
     console.error('Error fetching user courses:', error);
     res.status(500).json({ error: 'Error fetching courses' });
+  }
+});
+
+// ===== LMS: Enrollments =====
+// Enroll current user to a course
+app.post('/api/lms/enroll', auth, async (req, res) => {
+  try {
+    const { courseId } = req.body;
+    if (!courseId) return res.status(400).json({ error: 'courseId is required' });
+    const course = await Course.findById(courseId);
+    if (!course || !course.isPublished) return res.status(404).json({ error: 'Course not found' });
+    const enrollment = await Enrollment.findOneAndUpdate(
+      { userId: req.user._id, courseId },
+      { $setOnInsert: { status: 'active', startedAt: new Date() } },
+      { upsert: true, new: true }
+    );
+    res.json({ enrollment });
+  } catch (error) {
+    console.error('Enroll error:', error);
+    res.status(500).json({ error: 'Error enrolling in course' });
+  }
+});
+
+// List my enrollments
+app.get('/api/lms/my-enrollments', auth, async (req, res) => {
+  try {
+    const enrollments = await Enrollment.find({ userId: req.user._id }).populate('courseId', 'title slug thumbnailUrl');
+    res.json({ enrollments });
+  } catch (error) {
+    console.error('List enrollments error:', error);
+    res.status(500).json({ error: 'Error fetching enrollments' });
+  }
+});
+
+// ===== LMS: Progress =====
+function computeOverallPercent(course, activities) {
+  if (!course || !Array.isArray(course.modules)) return 0;
+  const totalLessons = course.modules.reduce((acc, m) => acc + (m.lessons?.length || 0), 0);
+  if (totalLessons === 0) return 0;
+  const completedSet = new Set(activities.filter(a => a.completed).map(a => `${a.moduleId}:${a.lessonId}`));
+  const completed = completedSet.size;
+  return Math.min(100, Math.round((completed / totalLessons) * 100));
+}
+
+// Upsert progress for a lesson
+app.post('/api/lms/progress', auth, async (req, res) => {
+  try {
+    const { courseId, moduleId, lessonId, completed, score, timeSpentSeconds } = req.body;
+    if (!courseId || !moduleId || !lessonId) {
+      return res.status(400).json({ error: 'courseId, moduleId, lessonId are required' });
+    }
+    const course = await Course.findById(courseId).select('modules');
+    if (!course) return res.status(404).json({ error: 'Course not found' });
+
+    const progress = await Progress.findOneAndUpdate(
+      { userId: req.user._id, courseId },
+      {
+        $setOnInsert: { activities: [] },
+      },
+      { upsert: true, new: true }
+    );
+
+    // Update or push specific activity
+    const activities = progress.activities || [];
+    const idx = activities.findIndex(a => a.moduleId === moduleId && a.lessonId === lessonId);
+    const now = new Date();
+    const update = {
+      moduleId,
+      lessonId,
+      lastVisitedAt: now
+    };
+    if (typeof completed === 'boolean') update.completed = completed;
+    if (typeof score === 'number') update.score = score;
+    if (typeof timeSpentSeconds === 'number') update.timeSpentSeconds = Math.max(0, (activities[idx]?.timeSpentSeconds || 0) + timeSpentSeconds);
+
+    if (idx >= 0) {
+      activities[idx] = { ...activities[idx].toObject?.() || activities[idx], ...update };
+    } else {
+      activities.push({ completed: false, score: null, timeSpentSeconds: 0, ...update });
+    }
+
+    // Compute overall
+    const overallPercent = computeOverallPercent(course, activities);
+
+    progress.activities = activities;
+    progress.overallPercent = overallPercent;
+    progress.lastActivity = { moduleId, lessonId, visitedAt: now };
+    await progress.save();
+
+    // Update enrollment snapshot
+    await Enrollment.findOneAndUpdate(
+      { userId: req.user._id, courseId },
+      { $set: { progressPercent: overallPercent, status: overallPercent === 100 ? 'completed' : 'active', completedAt: overallPercent === 100 ? new Date() : undefined } },
+      { upsert: true }
+    );
+
+    res.json({ progress });
+  } catch (error) {
+    console.error('Upsert progress error:', error);
+    res.status(500).json({ error: 'Error updating progress' });
+  }
+});
+
+// Get my progress for a course
+app.get('/api/lms/progress/:courseId', auth, async (req, res) => {
+  try {
+    const progress = await Progress.findOne({ userId: req.user._id, courseId: req.params.courseId });
+    res.json({ progress });
+  } catch (error) {
+    console.error('Get progress error:', error);
+    res.status(500).json({ error: 'Error fetching progress' });
+  }
+});
+
+// ===== LMS: AI generation stubs =====
+app.post('/api/ai/generate-text', auth, async (req, res) => {
+  try {
+    if (!isAdmin(req.user)) return res.status(403).json({ error: 'Forbidden' });
+    const { prompt } = req.body;
+    if (!prompt) return res.status(400).json({ error: 'prompt is required' });
+    // Placeholder: later integrate with provider
+    res.json({ text: `Draft for: ${prompt}\n\n1) Introduction...\n2) Key Concepts...\n3) Examples...` });
+  } catch (error) {
+    res.status(500).json({ error: 'AI text generation failed' });
+  }
+});
+
+app.post('/api/ai/generate-image', auth, async (req, res) => {
+  try {
+    if (!isAdmin(req.user)) return res.status(403).json({ error: 'Forbidden' });
+    const { prompt } = req.body;
+    if (!prompt) return res.status(400).json({ error: 'prompt is required' });
+    // Placeholder: return a placeholder image URL
+    res.json({ imageUrl: 'https://placehold.co/1024x576?text=AI+Image' });
+  } catch (error) {
+    res.status(500).json({ error: 'AI image generation failed' });
   }
 });
 

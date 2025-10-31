@@ -16,6 +16,7 @@ const Hero = ({ showNotification }) => {
 
   const statsRef = useRef(null);
   const [showJoinModal, setShowJoinModal] = useState(false);
+  const [joinSuccess, setJoinSuccess] = useState(false);
   const [joinForm, setJoinForm] = useState({
     name: '',
     email: '',
@@ -111,6 +112,7 @@ const Hero = ({ showNotification }) => {
       section: 'hero',
       action: 'open_join_modal'
     });
+    setJoinSuccess(false);
     setShowJoinModal(true);
   };
 
@@ -148,7 +150,7 @@ const Hero = ({ showNotification }) => {
         message: `Phone: ${joinForm.phone}\nInterests: ${joinForm.interests}\n\nJoined via Hero section`
       });
 
-      showNotification('🎉 Welcome to the Vibe! Your details have been saved to our database. We\'ll connect with you soon!', 'success');
+      showNotification('🎉 Welcome to the Vibe! Your details have been saved. We\'ll connect with you soon!', 'success');
       await analyticsService.trackEvent('hero_join_movement_completed', {
         section: 'hero',
         action: 'form_submitted',
@@ -157,7 +159,7 @@ const Hero = ({ showNotification }) => {
       });
 
       setJoinForm({ name: '', email: '', phone: '', interests: '' });
-      setShowJoinModal(false);
+      setJoinSuccess(true);
     } catch (error) {
       console.error('Error joining movement:', error);
       
@@ -260,82 +262,99 @@ const Hero = ({ showNotification }) => {
                 <i className="fas fa-times"></i>
               </button>
             </div>
-            
-            <form onSubmit={handleJoinFormSubmit} className="join-form">
-              <div className="form-group">
-                <label htmlFor="name">Full Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={joinForm.name}
-                  onChange={handleJoinFormChange}
-                  required
-                  placeholder="Enter your full name"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={joinForm.email}
-                  onChange={handleJoinFormChange}
-                  required
-                  placeholder="Enter your email"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="phone">Phone (Optional)</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={joinForm.phone}
-                  onChange={handleJoinFormChange}
-                  placeholder="Enter your phone number"
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="interests">What interests you most?</label>
-                <select
-                  id="interests"
-                  name="interests"
-                  value={joinForm.interests}
-                  onChange={handleJoinFormChange}
-                  required
-                >
-                  <option value="">Select your interest</option>
-                  <option value="creative-coding">Creative Coding</option>
-                  <option value="music-programming">Music Programming</option>
-                  <option value="lifestyle-transformation">Lifestyle Transformation</option>
-                  <option value="community">Community & Networking</option>
-                  <option value="all">All of the above</option>
-                </select>
-              </div>
+            {!joinSuccess ? (
+              <form onSubmit={handleJoinFormSubmit} className="join-form">
+                <div className="form-group">
+                  <label htmlFor="name">Full Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={joinForm.name}
+                    onChange={handleJoinFormChange}
+                    required
+                    placeholder="Enter your full name"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={joinForm.email}
+                    onChange={handleJoinFormChange}
+                    required
+                    placeholder="Enter your email"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="phone">Phone (Optional)</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={joinForm.phone}
+                    onChange={handleJoinFormChange}
+                    placeholder="Enter your phone number"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="interests">What interests you most?</label>
+                  <select
+                    id="interests"
+                    name="interests"
+                    value={joinForm.interests}
+                    onChange={handleJoinFormChange}
+                    required
+                  >
+                    <option value="">Select your interest</option>
+                    <option value="creative-coding">Creative Coding</option>
+                    <option value="music-programming">Music Programming</option>
+                    <option value="lifestyle-transformation">Lifestyle Transformation</option>
+                    <option value="community">Community & Networking</option>
+                    <option value="all">All of the above</option>
+                  </select>
+                </div>
 
-              {/* reCAPTCHA widget */}
-              <div className="form-group" style={{ display: 'flex', justifyContent: 'center' }}>
-                <div
-                  className="g-recaptcha"
-                  data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-                  data-callback={() => {/* setJoinCaptchaVerified(true) */}}
-                />
+                {/* reCAPTCHA widget */}
+                <div className="form-group" style={{ display: 'flex', justifyContent: 'center' }}>
+                  <div
+                    className="g-recaptcha"
+                    data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                    data-callback={() => {/* setJoinCaptchaVerified(true) */}}
+                  />
+                </div>
+                
+                <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin" style={{ marginRight: '8px' }}></i>
+                      Joining the Vibe...
+                    </>
+                  ) : 'Join the Movement'}
+                </button>
+              </form>
+            ) : (
+              <div className="join-success">
+                <div className="success-icon">
+                  <i className="fas fa-check-circle"></i>
+                </div>
+                <h3>You're in! 🎉</h3>
+                <p>Thanks for joining the Vibe Movement. We'll reach out soon with next steps.</p>
+                <div className="modal-actions">
+                  <button className="btn btn-primary" onClick={() => { setShowJoinModal(false); navigate('/webinar'); }}>
+                    Join the Webinar
+                  </button>
+                  <button className="btn btn-secondary" onClick={() => setShowJoinModal(false)}>
+                    Close
+                  </button>
+                </div>
               </div>
-              
-              <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin" style={{ marginRight: '8px' }}></i>
-                    Joining the Vibe...
-                  </>
-                ) : 'Join the Movement'}
-              </button>
-            </form>
+            )}
           </div>
         </div>
       )}

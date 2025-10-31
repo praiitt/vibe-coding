@@ -86,10 +86,12 @@ const Navbar = ({ onLoginClick }) => {
             <li><a href="#home" onClick={() => scrollToSection('home')}>Home</a></li>
             <li><a href="#features" onClick={() => scrollToSection('features')}>Features</a></li>
             <li><a href="#curriculum" onClick={() => scrollToSection('curriculum')}>Curriculum</a></li>
+            <li><Link to="/courses" onClick={() => handleLinkClick('courses')}>Courses</Link></li>
             <li><Link to="/webinar" onClick={() => handleLinkClick('webinar')}>Webinar</Link></li>
             <li><Link to="/contact" onClick={() => handleLinkClick('contact')}>Contact</Link></li>
             {user ? (
               <>
+                <li><Link to="/my-learning" onClick={() => handleLinkClick('my-learning')}>My Learning</Link></li>
                 <li><Link to="/dashboard" onClick={() => handleLinkClick('dashboard')}>Dashboard</Link></li>
                 <li>
                   <div className="user-menu">
@@ -123,22 +125,22 @@ const Navbar = ({ onLoginClick }) => {
         </a>
         
         <Link 
-          to="/webinar" 
-          className={`nav-item ${location.pathname === '/webinar' ? 'active' : ''}`} 
-          onClick={() => handleLinkClick('webinar')}
+          to="/courses" 
+          className={`nav-item ${location.pathname === '/courses' ? 'active' : ''}`} 
+          onClick={() => handleLinkClick('courses')}
         >
-          <i className="fas fa-video"></i>
-          <span>Webinar</span>
+          <i className="fas fa-book"></i>
+          <span>Courses</span>
         </Link>
         
         {user ? (
           <Link 
-            to="/dashboard" 
-            className={`nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`} 
-            onClick={() => handleLinkClick('dashboard')}
+            to="/my-learning" 
+            className={`nav-item ${location.pathname === '/my-learning' ? 'active' : ''}`} 
+            onClick={() => handleLinkClick('my-learning')}
           >
-            <i className="fas fa-tachometer-alt"></i>
-            <span>Dashboard</span>
+            <i className="fas fa-graduation-cap"></i>
+            <span>Learning</span>
           </Link>
         ) : (
           <button className="nav-item nav-item-button" onClick={handleLoginClick}>

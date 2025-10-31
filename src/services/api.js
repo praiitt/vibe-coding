@@ -136,6 +136,76 @@ class ApiService {
       body: JSON.stringify({ code }),
     });
   }
+
+  // ===== LMS APIs =====
+  // Courses
+  async getCourses(includeUnpublished = false) {
+    const params = includeUnpublished ? '?includeUnpublished=true' : '';
+    return this.request(`/api/courses${params}`);
+  }
+
+  async getCourse(slug) {
+    return this.request(`/api/courses/${slug}`);
+  }
+
+  async createCourse(courseData) {
+    return this.request('/api/courses', {
+      method: 'POST',
+      body: JSON.stringify(courseData),
+    });
+  }
+
+  async updateCourse(courseId, courseData) {
+    return this.request(`/api/courses/${courseId}`, {
+      method: 'PUT',
+      body: JSON.stringify(courseData),
+    });
+  }
+
+  async deleteCourse(courseId) {
+    return this.request(`/api/courses/${courseId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Enrollments
+  async enrollInCourse(courseId) {
+    return this.request('/api/lms/enroll', {
+      method: 'POST',
+      body: JSON.stringify({ courseId }),
+    });
+  }
+
+  async getMyEnrollments() {
+    return this.request('/api/lms/my-enrollments');
+  }
+
+  // Progress
+  async updateProgress(progressData) {
+    return this.request('/api/lms/progress', {
+      method: 'POST',
+      body: JSON.stringify(progressData),
+    });
+  }
+
+  async getProgress(courseId) {
+    return this.request(`/api/lms/progress/${courseId}`);
+  }
+
+  // AI Generation
+  async generateText(prompt) {
+    return this.request('/api/ai/generate-text', {
+      method: 'POST',
+      body: JSON.stringify({ prompt }),
+    });
+  }
+
+  async generateImage(prompt) {
+    return this.request('/api/ai/generate-image', {
+      method: 'POST',
+      body: JSON.stringify({ prompt }),
+    });
+  }
 }
 
 export const apiService = new ApiService();

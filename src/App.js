@@ -21,6 +21,12 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import CancellationRefundPolicy from './pages/CancellationRefundPolicy';
 import ProtectedRoute from './components/ProtectedRoute';
 import LinkedInSuccess from './pages/LinkedInSuccess';
+// LMS Components
+import CourseCatalog from './components/CourseCatalog';
+import CoursePlayer from './components/CoursePlayer';
+import MyLearning from './components/MyLearning';
+import AdminDashboard from './components/AdminDashboard';
+import CourseAuthor from './components/CourseAuthor';
 import { useNotification } from './hooks/useNotification';
 import { useAuth } from './contexts/AuthContext';
 
@@ -100,6 +106,36 @@ function App() {
           <Route path="/terms" element={<TermsAndConditions />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/cancellation-refund" element={<CancellationRefundPolicy />} />
+          
+          {/* LMS Routes */}
+          <Route path="/courses" element={<CourseCatalog showNotification={showNotification} />} />
+          <Route path="/my-learning" element={
+            <ProtectedRoute>
+              <MyLearning showNotification={showNotification} />
+            </ProtectedRoute>
+          } />
+          <Route path="/learn/:slug" element={
+            <ProtectedRoute>
+              <CoursePlayer showNotification={showNotification} />
+            </ProtectedRoute>
+          } />
+          
+          {/* Admin Routes */}
+          <Route path="/admin/courses" element={
+            <ProtectedRoute>
+              <AdminDashboard showNotification={showNotification} />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/courses/new" element={
+            <ProtectedRoute>
+              <CourseAuthor showNotification={showNotification} />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/courses/:courseId/edit" element={
+            <ProtectedRoute>
+              <CourseAuthor showNotification={showNotification} />
+            </ProtectedRoute>
+          } />
         </Routes>
         
         <Footer />

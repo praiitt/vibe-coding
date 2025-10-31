@@ -1,4 +1,4 @@
-# Firebase App Hosting configuration for prod
+np# Firebase App Hosting configuration for prod
 # Follows documented schema: env as a list, with value/secret and availability
 # Ref: https://firebase.google.com/docs/app-hosting/configure
 
